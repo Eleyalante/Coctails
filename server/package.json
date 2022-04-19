@@ -11,6 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mongoose": "latest",
+    "mongoose-types": "latest",
+    "connect-mongo": "latest"
   }
 }
