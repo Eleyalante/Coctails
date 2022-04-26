@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export class Ingredient extends mongoose.Document {
-    id:string;
+    id: string;
     name: string;
     unit: string;
     image: string;
@@ -17,10 +17,10 @@ const ingredientSchema: mongoose.Schema = new mongoose.Schema({
         type: String,
         required: true
     },
-    image:{
-        type:String,
-        required:false,
-        default:null
+    image: {
+        type: String,
+        required: false,
+        default: null
     }
 }, {
     versionKey: false,

@@ -1,8 +1,7 @@
 import * as mongoose from "mongoose";
-import * as Mongoose from "mongoose";
 
 
-export abstract class BaseRepository<T extends  Mongoose.Document> {
+export abstract class BaseRepository<T extends  mongoose.Document> {
 
     protected _model: mongoose.Model<T>;
 
@@ -11,7 +10,7 @@ export abstract class BaseRepository<T extends  Mongoose.Document> {
         this._model = model;
     }
 
-    create(item: any): Promise<mongoose.Document<T>> {
+    create(item: any): Promise<T> {
         return this._model.create(item);
     }
 
@@ -23,4 +22,11 @@ export abstract class BaseRepository<T extends  Mongoose.Document> {
     async all() : Promise<T[]>{
         return this._model.find({}).exec();
     }
+
+    async delete(id: string): Promise<any>{
+        return this._model.findByIdAndDelete({
+            _id:id
+        });
+    }
+
 }

@@ -15,7 +15,7 @@ export abstract class BaseController<BaseRepository> {
     }
 
     ok(res: express.Response, apiResponse: ApiResponse<any>) {
-        return this.jsonResponse(res, 400, apiResponse);
+        return this.jsonResponse(res, 200, apiResponse);
     }
 
     error(res: express.Response, apiResponse: ApiResponse<any>) {

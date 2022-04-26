@@ -5,14 +5,32 @@ import {Ingredient} from "../models/Ingredient";
 import {BaseController} from "./BaseController";
 
 export class IngredientController extends BaseController<IngredientRepository> {
-    public path = '/ingredients';
-
 
     constructor(repository: IngredientRepository) {
         super(repository);
     }
 
 
+    async delete(req: express.Request, res: express.Response) {
+        let result: ApiResponse<boolean>;
+        try {
+            if (this.isNullOrEmpty(req.query.id)) {
+                result = new ApiResponse<boolean>(null, false, 'Wrong ID format');
+                return this.error(res, result);
+            }
+            let id = req.query.id.toString();
+            const deleteResult = await this._repository.delete(id);
+            if(deleteResult == null){
+                result = new ApiResponse<boolean>(false, false,'Delete was not successfully');
+                return this.error(res, result);
+            }
+            result = new ApiResponse<boolean>(deleteResult.acknowledged, true);
+            return this.ok(res, result);
+        } catch (e) {
+            result = new ApiResponse<boolean>(null, false, e.toString());
+            return this.error(res, result);
+        }
+    }
 
     async getById(req: express.Request, res: express.Response) {
         let result: ApiResponse<Ingredient>;
@@ -24,6 +42,25 @@ export class IngredientController extends BaseController<IngredientRepository> {
             let id = req.query.id.toString();
             const ingredient = await this._repository.getById(id);
             result = new ApiResponse<Ingredient>(ingredient, true);
+            return this.ok(res, result);
+        } catch (e) {
+            result = new ApiResponse<Ingredient>(null, false, e.toString());
+            return this.error(res, result);
+        }
+    }
+
+    async update(req: express.Request, res: express.Response) {
+        let result: ApiResponse<Ingredient>;
+        try {
+            const input: Ingredient = req.body;
+            if (this.isNullOrEmpty(input.name) || this.isNullOrEmpty(input.unit)) {
+                result = new ApiResponse<Ingredient>(null, false, 'Wrong request input');
+                return this.error(res, result);
+            }
+            let updateResult = await this._repository.update(input);
+            console.log(updateResult);
+            const cocktail = await this._repository.getById(input.id);
+            result = new ApiResponse<Ingredient>(cocktail, true);
             return this.ok(res, result);
         } catch (e) {
             result = new ApiResponse<Ingredient>(null, false, e.toString());
