@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleXmark,
   faMagnifyingGlass,
+  faPlus,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
 const cx = classNames.bind(styles);
@@ -14,9 +15,7 @@ function Header() {
       <div className={cx("inner")}>
         <div className={cx("logo")}>
           <button>
-            <h1>
-              <a href='/'>Logo</a>
-            </h1>
+            <a href='/'>Logo</a>
           </button>
         </div>
         <div className={cx("nav")}>
@@ -24,6 +23,12 @@ function Header() {
           <button>About</button>
           <button>Recipes</button>
           <button>Contact</button>
+        </div>
+        <div className={cx("add")}>
+          <button className={cx("add-btn")}>
+            <FontAwesomeIcon icon={faPlus} />
+            Add Recipe
+          </button>
         </div>
         <div className={cx("search")}>
           <input placeholder='search' spellCheck={false}></input>
