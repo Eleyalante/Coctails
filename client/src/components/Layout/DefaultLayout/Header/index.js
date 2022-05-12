@@ -14,7 +14,9 @@ function Header() {
       <div className={cx("inner")}>
         <div className={cx("logo")}>
           <button>
-            <h1>Logo</h1>
+            <h1>
+              <a href='/'>Logo</a>
+            </h1>
           </button>
         </div>
         <div className={cx("nav")}>
