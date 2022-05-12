@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 function Cocktail() {
-  return (
-    <div>Cocktail page</div>
-  )
+  return <div>Cocktail page</div>;
 }
 
-export default Cocktail
+export default Cocktail;
