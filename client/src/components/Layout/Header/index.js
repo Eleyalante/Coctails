@@ -26,8 +26,10 @@ function Header() {
         </div>
         <div className={cx("add")}>
           <button className={cx("add-btn")}>
-            <FontAwesomeIcon icon={faPlus} />
-            Add Recipe
+            <a href='/add'>
+              <FontAwesomeIcon icon={faPlus} />
+              Add Recipe
+            </a>
           </button>
         </div>
         <div className={cx("search")}>
