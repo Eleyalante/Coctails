@@ -1,1 +1,21 @@
-export { default as DefaultLayout} from './DefaultLayout'
+import classNames from "classnames/bind";
+import styles from "./Layout.module.scss";
+
+import Header from "./Header";
+import Sidebar from "./Sidebar";
+
+const cx = classNames.bind(styles);
+
+function Layout({ children }) {
+  return (
+    <div className={cx("wrapper")}>
+      <Header />
+      <div className={cx("container")}>
+        <Sidebar />
+        <div className={cx("content")}>{children}</div>
+      </div>
+    </div>
+  );
+}
+
+export default Layout;

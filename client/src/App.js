@@ -1,14 +1,14 @@
 import Pages from "./routes";
 import { BrowserRouter } from "react-router-dom";
-import { DefaultLayout } from "./components/Layout";
+import Layout from "./components/Layout";
 
 function App() {
   return (
     <div className='App'>
       <BrowserRouter>
-        <DefaultLayout>
+        <Layout>
           <Pages />
-        </DefaultLayout>
+        </Layout>
       </BrowserRouter>
     </div>
   );
