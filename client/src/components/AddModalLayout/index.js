@@ -2,19 +2,19 @@ import React from "react";
 import classNames from "classnames/bind";
 import styles from "./ModalLayout.module.scss";
 import Header from "./Header";
-import Main from "./Main";
+import Content from "./Content";
 
 const cx = classNames.bind(styles);
 
-function ModalLayout() {
+function AddModalLayout() {
   return (
     <div className={cx("wrapper")}>
       <div className={cx("container")}>
         <Header />
-        <Main />
+        <Content />
       </div>
     </div>
   );
 }
 
-export default ModalLayout;
+export default AddModalLayout;

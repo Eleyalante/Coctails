@@ -1,10 +1,10 @@
 import React from "react";
-import ModalLayout from "../components/ModalLayout";
+import AddModalLayout from "../components/AddModalLayout";
 
 function Add() {
   return (
     <div>
-      <ModalLayout />
+      <AddModalLayout />
     </div>
   );
 }
