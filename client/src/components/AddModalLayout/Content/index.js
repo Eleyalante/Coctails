@@ -170,7 +170,7 @@ function Content() {
 
         <div className={cx("save-btn")}>
           <button>
-            <a href='/myrecipes'>Add recipe</a>
+            <a href='/mycocktails'>Add recipe</a>
           </button>
         </div>
       </div>
