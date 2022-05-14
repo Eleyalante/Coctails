@@ -1,0 +1,21 @@
+.wrapper {
+}
+.inner {
+}
+.home-section,
+.about-section,
+.cocktails-section,
+.contact-section {
+  height: 500px;
+}
+.home-header,
+.about-header,
+.cocktails-header,
+.contact-header {
+  display: flex;
+  justify-content: center;
+}
+.about-section,
+.cocktails-section {
+  padding-top: 100px;
+}

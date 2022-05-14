@@ -1,3 +1,4 @@
+// import style, classname, icons
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,6 +8,12 @@ import {
   faPlus,
   faSpinner,
 } from "@fortawesome/free-solid-svg-icons";
+
+//import
+// import { useState } from "react";
+// import { FaSearch } from "react-icons/fa";
+// import { useNavigate } from "react-router-dom";
+
 const cx = classNames.bind(styles);
 
 function Header() {
@@ -19,10 +26,18 @@ function Header() {
           </button>
         </div>
         <div className={cx("nav")}>
-          <button>Home</button>
-          <button>About</button>
-          <button>Recipes</button>
-          <button>Contact</button>
+          <button>
+            <a href='#'>Home</a>
+          </button>
+          <button>
+            <a href='#about'>About</a>
+          </button>
+          <button>
+            <a href='#cocktails'>Cocktails</a>
+          </button>
+          <button>
+            <a href='#contact'>Contact</a>
+          </button>
         </div>
         <div className={cx("add")}>
           <button className={cx("add-btn")}>

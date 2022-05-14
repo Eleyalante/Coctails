@@ -3,6 +3,7 @@ import styles from "./Layout.module.scss";
 
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import Content from "./Content";
 
 const cx = classNames.bind(styles);
 
@@ -12,7 +13,10 @@ function MainLayout({ children }) {
       <Header />
       <div className={cx("container")}>
         {/* <Sidebar /> */}
-        <div className={cx("content")}>{children}</div>
+        <div className={cx("content")}>
+          <Content />
+          {/* {children} */}
+        </div>
       </div>
     </div>
   );
