@@ -7,14 +7,14 @@ import { Route, Routes } from "react-router-dom";
 // import Searched from "../pages/Searched";
 import Home from "../pages/Home";
 import Add from "../pages/Add";
-import Myrecipes from "../pages/myRecipes";
+import MyCocktails from "../pages/myCocktails";
 
 function Pages() {
   return (
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/add' element={<Add />} />
-      <Route path='/myrecipes' element={<Myrecipes />} />
+      <Route path='/mycocktails' element={<MyCocktails />} />
       {/* <Route path='/category' element={<Category />} />
       <Route path='/cocktail' element={<Cocktail />} />
       <Route path='/searched/search' element={<Searched />} /> */}

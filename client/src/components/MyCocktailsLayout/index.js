@@ -6,7 +6,7 @@ import Main from "./Main";
 
 const cx = classNames.bind(styles);
 
-function MyRecipesLayout() {
+function MyCocktailsLayout() {
   return (
     <div className={cx("wrapper")}>
       <div className={cx("container")}>
@@ -17,4 +17,4 @@ function MyRecipesLayout() {
   );
 }
 
-export default MyRecipesLayout;
+export default MyCocktailsLayout;

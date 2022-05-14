@@ -30,13 +30,31 @@ function Header() {
             <a href='#'>Home</a>
           </button>
           <button>
-            <a href='#about'>About</a>
+            <a href='/mycocktails'>My cocktails</a>
           </button>
           <button>
             <a href='#cocktails'>Cocktails</a>
           </button>
           <button>
-            <a href='#contact'>Contact</a>
+            <a href='#'>Filter</a>
+          </button>
+          {/* dropdown */}
+          <button>
+            More
+            <div className={cx("subnav")}>
+              <ul className={cx("btns")}>
+                <li>
+                  <button class={cx("about-btn")}>
+                    <a href='#about'>About</a>
+                  </button>
+                </li>
+                <li>
+                  <button class={cx("contact-btn")}>
+                    <a href='#contact'>Contact</a>
+                  </button>
+                </li>
+              </ul>
+            </div>
           </button>
         </div>
         <div className={cx("add")}>
