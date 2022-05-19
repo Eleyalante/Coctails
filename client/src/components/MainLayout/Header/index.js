@@ -22,7 +22,9 @@ function Header() {
       <div className={cx("inner")}>
         <div className={cx("logo")}>
           <button>
-            <a href='/'>Logo</a>
+            <a href='/'>
+              <img src='/images/Logo.jpg' alt='logo'></img>
+            </a>
           </button>
         </div>
         <div className={cx("nav")}>
