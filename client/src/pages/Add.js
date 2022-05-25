@@ -1,11 +1,10 @@
 import React from "react";
-import AddModalLayout from "../components/AddModalLayout";
-
+import AddPage from "../components/AddPage/AddPage";
 function Add() {
   return (
-    <div>
-      <AddModalLayout />
-    </div>
+    <>
+      <AddPage />
+    </>
   );
 }
 

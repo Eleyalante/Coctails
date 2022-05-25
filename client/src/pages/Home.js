@@ -1,11 +1,10 @@
 import React from "react";
-import MainLayout from "../components/MainLayout";
-
+import MainPage from "../components/MainPage/MainPage";
 function Home() {
   return (
-    <div>
-      <MainLayout>home page</MainLayout>
-    </div>
+    <>
+      <MainPage />
+    </>
   );
 }
 

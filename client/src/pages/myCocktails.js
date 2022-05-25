@@ -1,11 +1,11 @@
 import React from "react";
-import MyCocktailsLayout from "../components/MyCocktailsLayout";
+import MyCocktailsPage from "../components/MyCocktailsPage/MyCocktailsPage";
 
 function MyCocktails() {
   return (
-    <div>
-      <MyCocktailsLayout />
-    </div>
+    <>
+      <MyCocktailsPage />
+    </>
   );
 }
 

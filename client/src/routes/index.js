@@ -8,6 +8,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "../pages/Home";
 import Add from "../pages/Add";
 import MyCocktails from "../pages/myCocktails";
+import Header from "../common/Header/Header";
 
 function Pages() {
   return (
