@@ -2,7 +2,7 @@ import React from "react";
 import "./AddPage.scss";
 import ScnHeader from "../../common/ScnHeader/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 function AddPage() {
   return (
     <>
@@ -40,7 +40,13 @@ function AddPage() {
               </button>
             </div>
           </div>
-          <div className='ingredients'>
+          <div className='add-btn'>
+            <button>
+              <FontAwesomeIcon icon={faPlus} />
+            </button>
+          </div>
+
+          {/* <div className='ingredients'>
             <div className='amount'>
               <p>Amount</p>
               <input placeholder='...' spellCheck={false}></input>
@@ -165,12 +171,12 @@ function AddPage() {
                 <FontAwesomeIcon icon={faTrash} />
               </button>
             </div>
-          </div>
+          </div> */}
           {/* ////////////////////////////////////////////////////////// */}
 
           <div className='save-btn'>
             <button>
-              <a href='/mycocktails'>Add recipe</a>
+              <a href='/mycocktails'>Save recipe</a>
             </button>
           </div>
         </div>
