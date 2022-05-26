@@ -1,183 +1,60 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./AddPage.scss";
 import ScnHeader from "../../common/ScnHeader/Header";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import SaveButton from "./Buttons/SaveButton";
+import AddButton from "./Buttons/AddButton";
+// import DeleteButton from "./Buttons/DeleteButton";
+import IngredientsModal from "./IngredientsModal";
+import IngredientListItem from "./IngredientListItem";
+import MainModal from "./MainModal";
+
 function AddPage() {
+  const [modals, setModals] = useState([]);
+
+  // ----------Add Modal----------
+  const addModal = (modal) => {
+    // if (!modal.text || /^\s*$/.test(modal.text)) {
+    //   return;
+    // }
+    const newModal = [...modals, modal];
+    setModals(newModal);
+  };
+
+  // ----------Delete Modal----------
+  const deleteModal = (modal) => {
+    const modalItem = [...modals].filter(
+      (modalItem) => modalItem.id !== modal.id
+    );
+    setModals(modalItem);
+  };
+
   return (
     <>
       <ScnHeader />
       <section className='homeAdd'>
         <div className='container'>
-          <div className='title'>
-            <p>Title</p>
-            <input placeholder='...' spellCheck={false}></input>
-          </div>
-          <div className='source'>
-            <p>Source</p>
-            <input placeholder='...' spellCheck={false}></input>
-          </div>
-
-          {/* /////////////////////////////ingredients modal///////////////////////////// */}
-          <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
+          {/* ----------Main Modal---------- */}
+          <div className='main-modal'>
+            <MainModal />
           </div>
           <div className='add-btn'>
-            <button>
-              <FontAwesomeIcon icon={faPlus} />
-            </button>
+            <AddButton addModalprop={addModal} />
+          </div>
+          {/* ----------Ingredient Modal---------- */}
+          <div className='ingredients-modal'>
+            <IngredientsModal addModalprop={addModal} />
+            {modals.map((modal) => (
+              <IngredientListItem
+                key={modal.id}
+                item={modal}
+                deleteModalProp={deleteModal}
+              />
+            ))}
           </div>
 
-          {/* <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          </div>
-          <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          </div>
-          <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          </div>
-          <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          </div>
-          <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          </div>
-          <div className='ingredients'>
-            <div className='amount'>
-              <p>Amount</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='unit'>
-              <p>Unit</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='ingredient'>
-              <p>Ingredient</p>
-              <input placeholder='...' spellCheck={false}></input>
-            </div>
-            <div className='note'>
-              <p>Note</p>
-              <input placeholder='...' spellCheck={false}></input>
-              <button className='delete-btn'>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
-          </div> */}
-          {/* ////////////////////////////////////////////////////////// */}
-
+          {/* ----------Save Button---------- */}
           <div className='save-btn'>
-            <button>
-              <a href='/mycocktails'>Save recipe</a>
-            </button>
+            <SaveButton />
           </div>
         </div>
       </section>
