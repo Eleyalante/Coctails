@@ -49,49 +49,49 @@
   }
 }
 
-.ingredients-modal {
-  form {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    margin-top: 10px;
-  }
-  button {
-    background-color: transparent;
-  }
-}
-.source {
-  margin-top: 20px;
-}
-.amount,
-.unit,
-.ingredient,
-.note {
-  margin-right: 10px;
-  input {
-    height: 30px;
-    border: 1.5px solid var(--black);
-    padding: 10px;
-    width: 40px;
+.ingredients-form {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  div {
+    padding-right: 10px;
   }
   p {
     font-size: 1rem;
   }
+  button {
+    background-color: transparent;
+    font-size: 2rem;
+    background-color: transparent;
+    &:hover {
+      cursor: pointer;
+      color: var(--primary);
+    }
+  }
+  input {
+    height: 30px;
+    border: 1.5px solid var(--black);
+    padding: 10px;
+  }
+}
+.amount {
+  width: 30px;
+}
+.source {
+  margin-top: 20px;
 }
 .unit {
-  input {
-    width: 80px;
+  width: 80px;
+  div {
+    padding-left: 20px;
   }
 }
 .ingredient {
-  input {
-    width: 300px;
-  }
+  width: 300px;
 }
 .note {
-  input {
-    width: 380px;
-  }
+  width: 380px;
   button {
     margin-left: 12px;
     background-color: transparent;
