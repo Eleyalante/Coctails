@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
+import Axios from "axios";
 
 function AddForm() {
+  const url = "http://localhost:8080/api/ingredients/all";
+
+  // useState--------------------
   const [inputFields, setInputFields] = useState([
     {
       id: uuidv4(),
@@ -21,15 +26,31 @@ function AddForm() {
     },
   ]);
 
+  const getInput = async () => {
+    const check = localStorage.getItem("inputFields");
+
+    if (check) {
+      setInputFields(JSON.parse(check));
+    } else {
+      const api = await fetch(url);
+      const data = await api.json();
+      localStorage.setItem("inputFields", JSON.stringify(data));
+      setInputFields(data);
+    }
+  };
+
+  // handleSubmit--------------------
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("InputFields", inputFields);
     console.log("InputMain", inputMain);
   };
+
   const handleSubmitAdd = (e) => {
     e.preventDefault();
   };
 
+  // handleChangeInput--------------------
   const handleChangeInput = (id, event) => {
     const newInputFields = inputFields.map((i) => {
       if (id === i.id) {
@@ -51,6 +72,7 @@ function AddForm() {
     setInputMain(newInputMain);
   };
 
+  // handleFunction--------------------
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
@@ -85,6 +107,7 @@ function AddForm() {
                 placeholder='...'
                 value={inputMain.title}
                 onChange={(event) => handleChangeInputMain(inputMain.id, event)}
+                // onChange={(e) => handle(e)}
               ></input>
               <p>Source</p>
               <input
@@ -161,13 +184,16 @@ function AddForm() {
             </div>
           ))}
         </form>
+
         <button
           className='save-btn'
           variant='contained'
           type='submit'
           onClick={handleSubmit}
         >
+          {/* <Link to='/mycocktails'> */}
           Save recipe
+          {/* </Link> */}
         </button>
       </div>
     </section>

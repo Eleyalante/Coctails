@@ -7,7 +7,7 @@ import { Route, Routes } from "react-router-dom";
 // import Searched from "../pages/Searched";
 import Home from "../pages/Home";
 import Add from "../pages/Add";
-import MyCocktails from "../pages/myCocktails";
+import Show from "../pages/Show";
 import Header from "../common/Header/Header";
 
 function Pages() {
@@ -15,7 +15,7 @@ function Pages() {
     <Routes>
       <Route path='/' element={<Home />} />
       <Route path='/add' element={<Add />} />
-      <Route path='/mycocktails' element={<MyCocktails />} />
+      <Route path='/show' element={<Show />} />
       {/* <Route path='/category' element={<Category />} />
       <Route path='/cocktail' element={<Cocktail />} />
       <Route path='/searched/search' element={<Searched />} /> */}

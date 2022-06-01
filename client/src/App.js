@@ -6,10 +6,8 @@ import Footer from "./common/Footer/Footer";
 function App() {
   return (
     <div className='App'>
-      <BrowserRouter>
-        {/* <Header /> */}
-        <Pages />
-      </BrowserRouter>
+      {/* <Header /> */}
+      <Pages />
     </div>
   );
 }
