@@ -3,12 +3,11 @@ import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
-import Axios from "axios";
 
 function AddForm() {
   const url = "http://localhost:8080/api/ingredients/all";
 
-  // useState--------------------
+  // --------------------useState--------------------
   const [inputFields, setInputFields] = useState([
     {
       id: uuidv4(),
@@ -26,31 +25,42 @@ function AddForm() {
     },
   ]);
 
-  const getInput = async () => {
-    const check = localStorage.getItem("inputFields");
-
-    if (check) {
-      setInputFields(JSON.parse(check));
-    } else {
-      const api = await fetch(url);
-      const data = await api.json();
-      localStorage.setItem("inputFields", JSON.stringify(data));
-      setInputFields(data);
-    }
-  };
-
-  // handleSubmit--------------------
+  // --------------------handleSubmit--------------------
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("InputFields", inputFields);
-    console.log("InputMain", inputMain);
+    console.log(inputFields, inputMain);
+    // console.log("InputMain", inputMain);
   };
 
   const handleSubmitAdd = (e) => {
     e.preventDefault();
+    const newInput = {
+      title: inputMain.title,
+      source: inputMain.source,
+      amount: inputFields.amount,
+      unit: inputFields.unit,
+      ingredient: inputFields.ingredient,
+      note: inputFields.note,
+
+      inputFields,
+      inputMain,
+      header: { "Access-Control-Allow-Origin": "*" },
+    };
+
+    fetch("http://localhost:8080/api/ingredients/all", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newInput),
+    })
+      .then(() => {
+        console.log("new ingredient added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  // handleChangeInput--------------------
+  // --------------------handleChangeInput--------------------
   const handleChangeInput = (id, event) => {
     const newInputFields = inputFields.map((i) => {
       if (id === i.id) {
@@ -58,10 +68,6 @@ function AddForm() {
       }
       return i;
     });
-
-    setInputFields(newInputFields);
-  };
-  const handleChangeInputMain = (id, event) => {
     const newInputMain = inputMain.map((i) => {
       if (id === i.id) {
         i[event.target.name] = event.target.value;
@@ -69,10 +75,21 @@ function AddForm() {
       return i;
     });
 
+    setInputFields(newInputFields);
     setInputMain(newInputMain);
   };
+  // const handleChangeInputMain = (id, event) => {
+  //   const newInputMain = inputMain.map((i) => {
+  //     if (id === i.id) {
+  //       i[event.target.name] = event.target.value;
+  //     }
+  //     return i;
+  //   });
 
-  // handleFunction--------------------
+  //   setInputMain(newInputMain);
+  // };
+
+  // --------------------handleFunction--------------------
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
@@ -106,7 +123,7 @@ function AddForm() {
                 className='title'
                 placeholder='...'
                 value={inputMain.title}
-                onChange={(event) => handleChangeInputMain(inputMain.id, event)}
+                onChange={(event) => handleChangeInput(inputMain.id, event)}
                 // onChange={(e) => handle(e)}
               ></input>
               <p>Source</p>
@@ -115,12 +132,11 @@ function AddForm() {
                 className='source'
                 placeholder='...'
                 value={inputMain.source}
-                onChange={(event) => handleChangeInputMain(inputMain.id, event)}
+                onChange={(event) => handleChangeInput(inputMain.id, event)}
               ></input>
             </div>
           ))}
-        </form>
-        <form onSubmit={handleSubmitAdd}>
+          {/* <form onSubmit={handleSubmitAdd}> */}
           {inputFields.map((inputField) => (
             <div key={inputField.id} className='ingredients-form'>
               <div>
@@ -183,18 +199,18 @@ function AddForm() {
               </button>
             </div>
           ))}
-        </form>
 
-        <button
-          className='save-btn'
-          variant='contained'
-          type='submit'
-          onClick={handleSubmit}
-        >
-          {/* <Link to='/mycocktails'> */}
-          Save recipe
-          {/* </Link> */}
-        </button>
+          <button
+            className='save-btn'
+            variant='contained'
+            type='submit'
+            onClick={handleSubmitAdd}
+          >
+            {/* <Link to='/mycocktails'> */}
+            Save recipe
+            {/* </Link> */}
+          </button>
+        </form>
       </div>
     </section>
   );

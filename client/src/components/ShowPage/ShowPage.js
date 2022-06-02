@@ -2,10 +2,10 @@ import "./ShowPage.scss";
 import ScnHeader from "../../common/ScnHeader/Header";
 import React, { useEffect, useState } from "react";
 import ModalList from "./ModalList";
-import List from "../../data";
+// import List from "../../data";
 
 function ShowPage() {
-  console.log(<List />);
+  // console.log(<List />);
   return (
     <>
       <ScnHeader />
