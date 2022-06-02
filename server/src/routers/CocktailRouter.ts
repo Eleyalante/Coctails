@@ -13,7 +13,7 @@ cocktailRouter.get('/getById', (req,res) => controller.getById(req,res))
 cocktailRouter.delete('/delete', (req,res) => controller.delete(req,res))
 
 
-cocktailRouter.post('/add', (req,res) => controller.add(req,res))
+cocktailRouter.post('/create', (req,res) => controller.create(req,res))
 cocktailRouter.post('/update', (req,res) => controller.update(req,res))
 
 

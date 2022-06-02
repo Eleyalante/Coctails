@@ -13,7 +13,7 @@ ingredientRouter.get('/getById', (req,res) => controller.getById(req,res))
 
 ingredientRouter.delete('/delete', (req,res) => controller.delete(req,res))
 
-ingredientRouter.post('/add', (req,res) => controller.add(req,res))
+ingredientRouter.post('/create', (req,res) => controller.create(req,res))
 ingredientRouter.post('/update', (req,res) => controller.update(req,res))
 
 

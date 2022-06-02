@@ -3,6 +3,8 @@ import {ApiResponse} from "../models/ApiResponse";
 import express from "express";
 import {Ingredient} from "../models/Ingredient";
 import {BaseController} from "./BaseController";
+import { ParamsDictionary } from "express-serve-static-core";
+import { ParsedQs } from "qs";
 
 export class IngredientController extends BaseController<IngredientRepository> {
 
@@ -115,7 +117,7 @@ export class IngredientController extends BaseController<IngredientRepository> {
     }
 
 
-    async add(req: express.Request, res: express.Response) {
+    async create(req: express.Request, res: express.Response) {
         const input = req.body;
         let result: ApiResponse<Ingredient>;
         if (this.isNullOrEmpty(input.name) || this.isNullOrEmpty(input.unit)) {

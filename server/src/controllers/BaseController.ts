@@ -43,4 +43,12 @@ export abstract class BaseController<BaseRepository> {
         return value === undefined || value === null || value.length < 1;
     }
 
+
+
+    abstract getById(req: express.Request, res: express.Response): any;
+    abstract all(req: express.Request, res: express.Response): any;
+    abstract delete(req: express.Request, res: express.Response): any;
+    abstract update(req: express.Request, res: express.Response): any;
+    abstract create(req: express.Request, res: express.Response): any;
+
 }

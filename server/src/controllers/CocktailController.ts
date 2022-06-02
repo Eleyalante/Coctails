@@ -83,7 +83,7 @@ export class CocktailController extends BaseController<CocktailRepository> {
         }
     }
 
-    async add(req: express.Request, res: express.Response) {
+    async create(req: express.Request, res: express.Response) {
         let result: ApiResponse<Cocktail>;
         try {
             const input: Cocktail = req.body;

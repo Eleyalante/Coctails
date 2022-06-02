@@ -40,7 +40,7 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
         if (exists != null) {
             throw new Error("Cocktail with this name already exists");
         } else {
-            return this._model.create(item);
+            return super.create(item);
         }
     }
 
