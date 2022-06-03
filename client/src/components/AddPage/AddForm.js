@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faPlus,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
 import axios from "axios";
@@ -9,188 +13,112 @@ import axios from "axios";
 function AddForm() {
   // --------------------getApi--------------------
 
-  const [posts, setPosts] = useState([]);
   const api = "http://localhost:8080/api";
-  useEffect(() => {
-    axios
-      .get(`${api}/ingredients/all`)
-      .then((res) => {
-        setPosts(res);
-        console.log(res);
-      })
-      .catch((err) => console.log(err));
-  }, []);
-  // --------------------useState--------------------
 
+  const [posts, setPosts] = useState([]);
   const [inputFields, setInputFields] = useState([
     {
       id: uuidv4(),
-      amount: "",
+      name: "",
       unit: "",
-      ingredient: "",
-      note: "",
+      image: "",
     },
   ]);
-  const [inputMain, setInputMain] = useState([
-    {
-      id: uuidv4(),
-      title: "",
-      source: "",
-    },
-  ]);
-
-  // --------------------handleSubmit--------------------
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   // console.log("InputMain", inputMain);
-  // };
+  // --------------------useState--------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const dateTime = format(new Date(), "MMMM dd, yyyy pp");
-    const newPost = [{ dateTime }, ...inputMain, ...inputFields];
-    // const post = { title: "New Post", body: "new" };
+    const [{ name }] = inputFields;
+    const [{ unit }] = inputFields;
+    const [{ image }] = inputFields;
 
-    // const newI = {
-    //   title: inputMain.name,
-    //   source: inputMain.name,
-    //   amount: inputFields.name,
-    //   unit: inputFields.name,
-    //   ingredient: inputFields.name,
-    //   note: inputFields.name,
-    // };
+    const list = {
+      name: name,
+      unit: unit,
+      image: image,
+    };
+    axios
+      .post(`${api}/ingredients/create`, list)
+      .then((res) => {
+        posts(res);
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-    console.log(newPost);
-    try {
-      axios.post(`${api}/ingredients/create`, newPost);
-      setPosts(newPost);
-      // console.log(posts);
-    } catch (err) {
-      console.log(err);
-    }
+    // console.log("inputfields", inputFields);
   };
   // --------------------handleChangeInput--------------------
-  const handleChangeInput = (id, event) => {
-    const newInputFields = inputFields.map((i) => {
-      if (id === i.id) {
-        i[event.target.name] = event.target.value;
-      }
-      return i;
-    });
-    const newInputMain = inputMain.map((i) => {
-      if (id === i.id) {
-        i[event.target.name] = event.target.value;
-      }
-      return i;
-    });
-
-    setInputFields(newInputFields);
-    setInputMain(newInputMain);
+  const handleChangeInput = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...inputFields];
+    list[index][name] = value;
+    setInputFields(list);
   };
 
   // --------------------handleFunction--------------------
-  const handleAddFields = () => {
+  const handleAddFields = (e) => {
+    e.preventDefault();
+
     setInputFields([
       ...inputFields,
       {
         id: uuidv4(),
-        amount: "",
+        name: "",
         unit: "",
-        ingredient: "",
-        note: "",
+        image: "",
       },
     ]);
   };
 
-  const handleRemoveFields = (id) => {
+  const handleRemoveFields = (index) => {
     const values = [...inputFields];
-    values.splice(
-      values.findIndex((value) => value.id === id),
-      1
-    );
+    values.splice(index, 1);
     setInputFields(values);
   };
   return (
     <section className='homeAdd'>
       <div className='container'>
         <form onSubmit={handleSubmit}>
-          {inputMain.map((inputMain) => (
-            <div key={inputMain.id} className='header-form'>
-              <p>Title</p>
-              <input
-                name='title'
-                className='title'
-                placeholder='...'
-                value={inputMain.title}
-                onChange={(event) => handleChangeInput(inputMain.id, event)}
-                // onChange={(e) => handle(e)}
-              ></input>
-              <p>Source</p>
-              <input
-                name='source'
-                className='source'
-                placeholder='...'
-                value={inputMain.source}
-                onChange={(event) => handleChangeInput(inputMain.id, event)}
-              ></input>
-            </div>
-          ))}
-          {/* <form onSubmit={handleSubmit}> */}
-          {inputFields.map((inputField) => (
-            <div key={inputField.id} className='ingredients-form'>
-              <div>
-                <p>Amount</p>
+          {inputFields.map((inputField, i) => (
+            <div key={inputField.id} className='form'>
+              <div className='name'>
+                <p>Name</p>
                 <input
-                  name='amount'
-                  label='Amount'
-                  variant='filled'
-                  className='amount'
+                  id='name'
+                  name='name'
                   placeholder='...'
-                  // variant='filled'
-                  value={inputField.amount}
-                  onChange={(event) => handleChangeInput(inputField.id, event)}
+                  value={inputField.name}
+                  onChange={(event) => handleChangeInput(event, i)}
                 ></input>
               </div>
-              <div>
+
+              <div className='unit'>
                 <p>Unit</p>
                 <input
+                  id='unit'
                   name='unit'
-                  label='Amount'
-                  variant='filled'
-                  className='unit'
                   placeholder='...'
                   value={inputField.unit}
-                  onChange={(event) => handleChangeInput(inputField.id, event)}
+                  onChange={(event) => handleChangeInput(event, i)}
                 ></input>
               </div>
-              <div>
-                <p>Ingredient</p>
+              <div className='image'>
+                <p>Image</p>
                 <input
-                  name='ingredient'
-                  label='Ingredient'
-                  variant='filled'
-                  className='ingredient'
+                  id='image'
+                  name='image'
                   placeholder='...'
-                  value={inputField.ingredient}
-                  onChange={(event) => handleChangeInput(inputField.id, event)}
+                  value={inputField.image}
+                  onChange={(event) => handleChangeInput(event, i)}
                 ></input>
               </div>
-              <div>
-                <p>Note</p>
-                <input
-                  name='note'
-                  label='Note'
-                  variant='filled'
-                  className='note'
-                  placeholder='...'
-                  value={inputField.note}
-                  onChange={(event) => handleChangeInput(inputField.id, event)}
-                ></input>
-              </div>
+
               <button
                 disabled={inputFields.length === 1}
-                onClick={() => handleRemoveFields(inputField.id)}
+                onClick={() => handleRemoveFields(i)}
               >
                 <FontAwesomeIcon icon={faTrash} />
               </button>
@@ -200,25 +128,17 @@ function AddForm() {
             </div>
           ))}
 
-          <button
-            className='save-btn'
-            variant='contained'
-            type='submit'
-            onClick={handleSubmit}
-          >
-            {/* <Link to='/mycocktails'> */}
-            Save recipe
-            {/* </Link> */}
-          </button>
+          <div className='save-btn'>
+            <button>Save recipe</button>
+          </div>
+          <div className='show-btn'>
+            <a href='/show'>
+              Your added cocktails
+              <FontAwesomeIcon icon={faArrowRight} />
+            </a>
+          </div>
         </form>
-        {/* <Fetch inputProps={[...inputFields, ...inputMain]} /> */}
-        <form>
-          {/* {posts.map((post) => (
-            <p>
-              <div key={post.id}>{post}</div>
-            </p>
-          ))} */}
-        </form>
+        {/* <div style={{ marginTop: 20 }}>{JSON.stringify(inputFields)}</div> */}
       </div>
     </section>
   );
