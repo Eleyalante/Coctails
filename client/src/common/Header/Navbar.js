@@ -22,9 +22,6 @@ function Navbar() {
                 <a href='#'>Home</a>
               </li>
               <li>
-                <a href='/mycocktails'>My cocktails</a>
-              </li>
-              <li>
                 <a href='#cocktails'>Cocktails</a>
               </li>
               {/* dropdown */}

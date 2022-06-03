@@ -1,9 +1,9 @@
 import React from "react";
-import AddPage from "../components/AddPage/AddPage";
+import AddCocktail from "../components/AddCocktail/";
 function Add() {
   return (
     <>
-      <AddPage />
+      <AddCocktail />
     </>
   );
 }

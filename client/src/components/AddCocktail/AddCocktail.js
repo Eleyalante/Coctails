@@ -6,11 +6,9 @@ import {
   faPlus,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { v4 as uuidv4 } from "uuid";
-import { format } from "date-fns";
 import axios from "axios";
 
-function AddForm() {
+function AddCocktail() {
   // --------------------getApi--------------------
 
   const api = "http://localhost:8080/api";
@@ -18,28 +16,46 @@ function AddForm() {
   const [posts, setPosts] = useState([]);
   const [inputFields, setInputFields] = useState([
     {
-      id: uuidv4(),
       name: "",
-      unit: "",
+      recipe: "",
+      ingredients: "",
       image: "",
     },
   ]);
+
+  useEffect(() => {
+    try {
+      axios.get(`${api}/cocktails/all`).then((res) => {
+        setPosts(res.data);
+        console.log(res.data);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }, [api]);
   // --------------------useState--------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const [{ name }] = inputFields;
-    const [{ unit }] = inputFields;
+    const [{ recipe }] = inputFields;
+    const [{ ingredients }] = inputFields;
     const [{ image }] = inputFields;
 
     const list = {
       name: name,
-      unit: unit,
+      recipe: recipe,
+      ingredients: ingredients,
       image: image,
     };
+    const newlist = {
+      name: "rest",
+      recipe: "test",
+      ingredients: "test",
+    };
     axios
-      .post(`${api}/ingredients/create`, list)
+      .post(`${api}/cocktails/create`, newlist)
       .then((res) => {
         posts(res);
         console.log(res);
@@ -65,9 +81,9 @@ function AddForm() {
     setInputFields([
       ...inputFields,
       {
-        id: uuidv4(),
         name: "",
-        unit: "",
+        recipe: "",
+        ingredients: "",
         image: "",
       },
     ]);
@@ -95,11 +111,21 @@ function AddForm() {
                 ></input>
               </div>
 
-              <div className='unit'>
+              <div className='recipe'>
                 <p>Unit</p>
                 <input
-                  id='unit'
-                  name='unit'
+                  id='recipe'
+                  name='recipe'
+                  placeholder='...'
+                  value={inputField.unit}
+                  onChange={(event) => handleChangeInput(event, i)}
+                ></input>
+              </div>
+              <div className='ingredients'>
+                <p>ingredients</p>
+                <input
+                  id='ingredients'
+                  name='ingredients'
                   placeholder='...'
                   value={inputField.unit}
                   onChange={(event) => handleChangeInput(event, i)}
@@ -110,7 +136,7 @@ function AddForm() {
                 <input
                   id='image'
                   name='image'
-                  placeholder='...'
+                  type='file'
                   value={inputField.image}
                   onChange={(event) => handleChangeInput(event, i)}
                 ></input>
@@ -132,8 +158,8 @@ function AddForm() {
             <button>Save recipe</button>
           </div>
           <div className='show-btn'>
-            <a href='/show'>
-              Your added cocktails
+            <a href='/addingredient'>
+              Add ingredient
               <FontAwesomeIcon icon={faArrowRight} />
             </a>
           </div>
@@ -144,4 +170,4 @@ function AddForm() {
   );
 }
 
-export default AddForm;
+export default AddCocktail;

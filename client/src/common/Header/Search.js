@@ -9,7 +9,7 @@ function Search() {
         <div className='logo'>
           <button>
             <a href='/'>
-              <img src='/images/Logo.jpg' alt='logo'></img>
+              <img src='/images/Logo.png' alt='logo'></img>
             </a>
           </button>
         </div>

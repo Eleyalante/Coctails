@@ -5,7 +5,7 @@ function AddBtn() {
   return (
     <div className='add-btn'>
       <button className='add-box'>
-        <a href='/add'>
+        <a href='/addcocktail'>
           <FontAwesomeIcon icon={faPlus} />
           Add Recipe
         </a>
