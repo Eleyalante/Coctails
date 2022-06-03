@@ -13,7 +13,7 @@ export class IngredientRepository extends BaseRepository<Ingredient> {
         return this._model.findOne({name:nameValue});
     }
 
-    async getByUnit(unitValue: string): Promise<Ingredient[]> {
+    async getByUnit(unitValue: String): Promise<Ingredient[]> {
         return this._model.find({unit:unitValue}).exec();
     }
 
@@ -34,5 +34,14 @@ export class IngredientRepository extends BaseRepository<Ingredient> {
                 unit:item.unit
             }
         );
+    }
+
+    async exists(itemIds: number[])  : Promise<Boolean>{
+
+        var result = await this._model.find({id:{$in:itemIds}});
+        if(result.length == 0){
+            return false;
+        }
+        return true;
     }
 }

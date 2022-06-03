@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
+import { Ingredient } from "./Ingredient";
 
 export class Cocktail extends mongoose.Document {
-    id:string;
+    id: string;
     name: string;
-    recipe:string;
-    ingredients: string[];
+    recipe: string;
+    ingredients: [
+        {
+            ingredient: Ingredient;
+            amount: number;
+        }
+    ];
     image: string;
 }
 
@@ -15,16 +21,17 @@ const cocktailSchema: mongoose.Schema = new mongoose.Schema({
         unique: true,
     },
     ingredients: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Ingredients',
+        ingredient: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingredients' },
+        amount: Number,
     }],
-    recipe:{
-      type:String,
-      required:true,
+    recipe: {
+        type: String,
+        required: true,
     },
-    image:{
-        type:String,
-        required:false,
-        default:null
+    image: {
+        type: String,
+        required: false,
+        default: null
     }
 }, {
     versionKey: false,

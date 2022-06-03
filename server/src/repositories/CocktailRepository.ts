@@ -16,7 +16,7 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
 
     override async getById(id: string): Promise<Cocktail> {
-        return this._model.findById(id).populate('ingredients');
+        return this._model.findById(id).populate('ingredients.ingredient');
     }
 
 
@@ -32,7 +32,7 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
     }
 
     override async all() : Promise<Cocktail[]>{
-        return this._model.find({}).populate('ingredients').exec();
+        return this._model.find({}).populate('ingredients.ingredient').exec();
     }
 
     override async create(item: Cocktail): Promise<Cocktail> {
