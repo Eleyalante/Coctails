@@ -3,6 +3,7 @@ import {BaseController} from "./BaseController";
 import {ApiResponse} from "../models/ApiResponse";
 import express from "express";
 import {Cocktail} from "../models/Cocktail";
+import { IngredientRepository } from "../repositories/IngredientRepository";
 
 
 export class CocktailController extends BaseController<CocktailRepository> {
@@ -74,8 +75,8 @@ export class CocktailController extends BaseController<CocktailRepository> {
     async all(req: express.Request, res: express.Response) {
         let result: ApiResponse<Cocktail[]>;
         try {
-            const ingredients = await this._repository.all();
-            result = new ApiResponse<Cocktail[]>(ingredients, true);
+            const cocktails = await this._repository.all();
+            result = new ApiResponse<Cocktail[]>(cocktails, true);
             return this.ok(res, result);
         } catch (e) {
             result = new ApiResponse<Cocktail[]>(null, false, e.toString());
