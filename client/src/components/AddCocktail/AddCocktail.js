@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -18,14 +17,20 @@ function AddCocktail() {
     {
       name: "",
       recipe: "",
-      ingredients: "",
+      ingredients: [
+        {
+          ingredient: "",
+          amount: "",
+        },
+      ],
       image: "",
     },
   ]);
+  // ----------------------------------------
 
   useEffect(() => {
     try {
-      axios.get(`${api}/cocktails/all`).then((res) => {
+      axios.get(`${api}/ingredients/all`).then((res) => {
         setPosts(res.data);
         console.log(res.data);
       });
@@ -33,38 +38,32 @@ function AddCocktail() {
       console.log(err);
     }
   }, [api]);
-  // --------------------useState--------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const [{ name }] = inputFields;
-    const [{ recipe }] = inputFields;
-    const [{ ingredients }] = inputFields;
-    const [{ image }] = inputFields;
-
-    const list = {
-      name: name,
-      recipe: recipe,
-      ingredients: ingredients,
-      image: image,
-    };
     const newlist = {
-      name: "rest",
-      recipe: "test",
-      ingredients: "test",
+      name: "test_add_ingred53453",
+      image: "test_img",
+      recipe: "recipe",
+      ingredients: [
+        {
+          ingredient: "6299ffc34d9f84dd9d293280",
+          amount: 1,
+        },
+      ],
     };
+
+    // inputFields.map((item, index) => {
     axios
       .post(`${api}/cocktails/create`, newlist)
       .then((res) => {
-        posts(res);
-        console.log(res);
+        setPosts(res);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    // console.log("inputfields", inputFields);
+    // });
   };
   // --------------------handleChangeInput--------------------
   const handleChangeInput = (e, index) => {
@@ -83,7 +82,12 @@ function AddCocktail() {
       {
         name: "",
         recipe: "",
-        ingredients: "",
+        ingredients: [
+          {
+            ingredient: "",
+            amount: "",
+          },
+        ],
         image: "",
       },
     ]);
@@ -112,7 +116,7 @@ function AddCocktail() {
               </div>
 
               <div className='recipe'>
-                <p>Unit</p>
+                <p>Recipe</p>
                 <input
                   id='recipe'
                   name='recipe'
@@ -122,10 +126,20 @@ function AddCocktail() {
                 ></input>
               </div>
               <div className='ingredients'>
-                <p>ingredients</p>
+                <p>Ingredient</p>
                 <input
-                  id='ingredients'
-                  name='ingredients'
+                  id='ingredient'
+                  name='ingredient'
+                  placeholder='...'
+                  value={inputField.unit}
+                  onChange={(event) => handleChangeInput(event, i)}
+                ></input>
+              </div>
+              <div className='ingredients'>
+                <p>Amount</p>
+                <input
+                  id='amount'
+                  name='ingredient'
                   placeholder='...'
                   value={inputField.unit}
                   onChange={(event) => handleChangeInput(event, i)}
@@ -164,7 +178,7 @@ function AddCocktail() {
             </a>
           </div>
         </form>
-        {/* <div style={{ marginTop: 20 }}>{JSON.stringify(inputFields)}</div> */}
+        <div style={{ marginTop: 20 }}>{JSON.stringify(inputFields)}</div>
       </div>
     </section>
   );

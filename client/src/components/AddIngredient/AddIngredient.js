@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -26,27 +25,17 @@ function AddIngredient() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const [{ name }] = inputFields;
-    const [{ unit }] = inputFields;
-    const [{ image }] = inputFields;
-
-    const list = {
-      name: name,
-      unit: unit,
-      image: image,
-    };
-    axios
-      .post(`${api}/ingredients/create`, list)
-      .then((res) => {
-        posts(res);
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    // console.log("inputfields", inputFields);
+    inputFields.map((item, index) => {
+      axios
+        .post(`${api}/ingredients/create`, item)
+        .then((res) => {
+          setPosts(res);
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   };
   // --------------------handleChangeInput--------------------
   const handleChangeInput = (e, index) => {
@@ -107,6 +96,7 @@ function AddIngredient() {
                 <input
                   id='image'
                   name='image'
+                  type='file'
                   placeholder='...'
                   value={inputField.image}
                   onChange={(event) => handleChangeInput(event, i)}
@@ -147,7 +137,7 @@ function AddIngredient() {
             </a>
           </div>
         </form>
-        {/* <div style={{ marginTop: 20 }}>{JSON.stringify(inputFields)}</div> */}
+        <div style={{ marginTop: 20 }}>{JSON.stringify(inputFields)}</div>
       </div>
     </section>
   );

@@ -47,3 +47,15 @@ th {
     }
   }
 }
+.btns {
+  button {
+    background-color: transparent;
+    font-size: 2rem;
+    padding: 5px 10px;
+
+    &:hover {
+      color: red;
+      cursor: pointer;
+    }
+  }
+}
