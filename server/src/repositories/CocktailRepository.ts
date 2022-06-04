@@ -21,7 +21,7 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
 
     async update(item: Cocktail): Promise<mongodb.UpdateResult>{
-        let exists = await this._model.exists({name: item.name});
+        let exists = await this._model.exists({name: item.name, '_id': {$ne:item.id}});
         if (exists != null) {
             throw new Error("Cocktail with this name already exists");
         } else {
@@ -30,7 +30,8 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
                     name:item.name,
                     image:item.image,
                     recipe:item.recipe,
-                    ingredients:item.ingredients
+                    ingredients:item.ingredients,
+                    categories:item.categories
                 }
             );
         }

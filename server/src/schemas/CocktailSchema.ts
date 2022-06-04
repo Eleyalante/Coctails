@@ -6,13 +6,6 @@ export const COCKTAIL_CREATE_SCHEMA = {
         "image": { "type": "string" },
         "categories": {
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "category": { "type": "string" },
-                },
-                "required": ["category"]
-            },
         },
         "ingredients": {
             "type": "array",
@@ -49,13 +42,7 @@ export const COCKTAIL_UPDATE_SCHEMA = {
         },
         "categories": {
             "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "category": { "type": "string" },
-                },
-                "required": ["category"]
-            },
+        
         },
     },
     "required": ["id", "name", "recipe", "ingredients"]

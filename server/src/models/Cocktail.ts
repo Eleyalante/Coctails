@@ -11,7 +11,7 @@ export class Cocktail extends mongoose.Document {
             amount: number;
         }
     ];
-    cocktails:[];
+    categories:[];
     image: string;
 }
 

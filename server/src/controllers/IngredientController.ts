@@ -3,7 +3,7 @@ import {ApiResponse} from "../models/ApiResponse";
 import express from "express";
 import {Ingredient} from "../models/Ingredient";
 import {BaseController} from "./BaseController";
-import { INGREDIENT_UPDATE_SCHEMA } from "../schemas/IngredientSchema";
+import { INGREDIENT_CREATE_SCHEMA, INGREDIENT_UPDATE_SCHEMA } from "../schemas/IngredientSchema";
 
 export class IngredientController extends BaseController<IngredientRepository> {
 
@@ -117,7 +117,7 @@ export class IngredientController extends BaseController<IngredientRepository> {
     async create(req: express.Request, res: express.Response) {
         let result: ApiResponse<Ingredient>;
         try {
-            this.validateReqBody(INGREDIENT_UPDATE_SCHEMA, req.body);
+            this.validateReqBody(INGREDIENT_CREATE_SCHEMA, req.body);
             const input: Ingredient = req.body;
 
             const ingredient = await this._repository.create(input);

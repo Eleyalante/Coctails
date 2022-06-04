@@ -43,9 +43,8 @@ export class CocktailController extends BaseController<CocktailRepository> {
 
             let updateResult = await this._repository.update(input);
             if(updateResult.modifiedCount == 1){
-                console.log(updateResult);
                 const cocktail = await this._repository.getById(input.id);
-                console.log(cocktail);
+            
                 result = new ApiResponse<Cocktail>(cocktail, true);
                 return this.ok(res, result);
             }else{
