@@ -10,13 +10,20 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
         super(CocktailModel);
     }
 
+
+    async getByIngredient(id: string) : Promise<Cocktail[]>{
+        let result = this._model.find({"ingredients.ingredient": id}).populate('ingredients.ingredient').populate('categories');
+        console.log(result);
+        return result;
+    }
+
     async getByName(nameValue: string): Promise<Cocktail> {
         return this._model.findOne({name:nameValue});
     }
 
 
     override async getById(id: string): Promise<Cocktail> {
-        return this._model.findById(id).populate('ingredients.ingredient');
+        return this._model.findById(id).populate('ingredients.ingredient').populate('categories');
     }
 
 
@@ -39,7 +46,7 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
     }
 
     override async all() : Promise<Cocktail[]>{
-        return this._model.find({}).populate('ingredients.ingredient').exec();
+        return this._model.find({}).populate('ingredients.ingredient').populate('categories');
     }
 
     override async create(item: Cocktail): Promise<Cocktail> {

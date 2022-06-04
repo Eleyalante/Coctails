@@ -4,6 +4,7 @@ import express from "express";
 import {Ingredient} from "../models/Ingredient";
 import {BaseController} from "./BaseController";
 import { INGREDIENT_CREATE_SCHEMA, INGREDIENT_UPDATE_SCHEMA } from "../schemas/IngredientSchema";
+import { CocktailRepository } from "../repositories/CocktailRepository"; 
 
 export class IngredientController extends BaseController<IngredientRepository> {
 
@@ -20,6 +21,13 @@ export class IngredientController extends BaseController<IngredientRepository> {
                 return this.error(res, result);
             }
             let id = req.query.id.toString();
+            const cocktailRepository = new CocktailRepository();
+            let coctailsWithIngredient = await cocktailRepository.getByIngredient(id);
+            console.log(coctailsWithIngredient);
+            if(coctailsWithIngredient.length > 0){
+                result = new ApiResponse<boolean>(null, false, 'Can\'t delete because some cocktails using this ingredient');
+                return this.error(res, result);
+            }
             const deleteResult = await this._repository.delete(id);
             if(deleteResult == null){
                 result = new ApiResponse<boolean>(false, false,'Delete was not successfully');
