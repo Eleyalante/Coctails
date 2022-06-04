@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import DeleteModal from "../../common/DeleteModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 const url = "http://localhost:8080/api";
 
 function Table(list, colNames) {
   const [api, setApi] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [inputFields, setInputFields] = useState([
-    {
-      name: "",
-      unit: "",
-      image: "",
-    },
-  ]);
+  const [confirm, setConfirm] = useState({
+    isLoading: false,
+  });
+  // --------------------------------------GET DATA FROM SERVER---------------------------
+
   useEffect(() => {
     try {
       axios.get(`${url}/ingredients/all`).then((res) => {
@@ -23,21 +21,35 @@ function Table(list, colNames) {
       console.log(err);
     }
   }, [url]);
-  // console.log(api);
 
   // --------------------------------------REMOVE---------------------------
+  // --------------------------------------Delete Form---------------------------
+  const handleConfirm = (isLoading) => {
+    setConfirm({
+      isLoading,
+    });
+  };
+  const idProductRef = useRef();
   const handleRemoveFields = (id, e) => {
-    // const values = post;
-    axios
-      .delete(`${url}/ingredients/delete?id=${id}`)
-      .then((res) => {
-        // res = values;
-        // values?.splice(post.id, 1);
-        // setApi(values);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    handleConfirm(true);
+    idProductRef.current = id;
+  };
+  const areUSureDelete = (choose) => {
+    if (choose) {
+      axios
+        .delete(`${url}/ingredients/delete?id=${idProductRef.current}`)
+        .then((res) => {
+          //refresh the page
+          window.location.reload(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      handleConfirm("", false);
+    } else {
+      handleConfirm("", false);
+    }
   };
   let content = null;
 
@@ -61,12 +73,8 @@ function Table(list, colNames) {
                 <th>{item.name}</th>
                 <th>{item.unit}</th>
                 <th>{item.image}</th>
-                {/* <th>{item.id}</th> */}
                 <th className='btns'>
-                  <button
-                    // disabled={api.length === 1}
-                    onClick={() => handleRemoveFields(item.id)}
-                  >
+                  <button onClick={() => handleRemoveFields(item.id)}>
                     <FontAwesomeIcon icon={faTrash} />
                   </button>
                   <button>
@@ -77,6 +85,7 @@ function Table(list, colNames) {
             ))}
           </tbody>
         </table>
+        {confirm.isLoading && <DeleteModal onConfirm={areUSureDelete} />}
       </section>
     );
   }

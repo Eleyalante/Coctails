@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -7,8 +7,9 @@ const url = "http://localhost:8080/api";
 
 function Table() {
   const [api, setApi] = useState([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  let content = null;
+  const [confirm, setConfirm] = useState({
+    isLoading: false,
+  });
 
   useEffect(() => {
     try {
@@ -19,19 +20,34 @@ function Table() {
       console.log(err);
     }
   }, [url]);
-  const handleRemoveFields = (id, e) => {
-    setModalOpen(true);
-    axios
-      .delete(`${url}/cocktails/delete?id=${id}`)
-      .then(() => {
-        // res = values;
-        // values?.splice(post.id, 1);
-        // setApi(values);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleConfirm = (isLoading) => {
+    setConfirm({
+      isLoading,
+    });
   };
+  const idProductRef = useRef();
+  const handleRemoveFields = (id, e) => {
+    handleConfirm(true);
+    idProductRef.current = id;
+  };
+  const areUSureDelete = (choose) => {
+    if (choose) {
+      axios
+        .delete(`${url}/cocktails/delete?id=${idProductRef.current}`)
+        .then((res) => {
+          //refresh the page
+          window.location.reload(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      handleConfirm("", false);
+    } else {
+      handleConfirm("", false);
+    }
+  };
+  let content = null;
 
   if (api) {
     content = (
@@ -67,7 +83,7 @@ function Table() {
             ))}
           </tbody>
         </table>
-        {/* {modalOpen && <DeleteModal setOpenModal={setModalOpen} />} */}
+        {confirm.isLoading && <DeleteModal onConfirm={areUSureDelete} />}
       </section>
     );
   }

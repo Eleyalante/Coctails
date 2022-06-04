@@ -1,11 +1,10 @@
 import React from "react";
 import "./index.scss";
 
-function DeleteModal(props) {
-  const { modalDelete, setModalDelete } = props;
+function DeleteModal({ onConfirm }) {
   return (
     <>
-      <div className='modal-delete'>
+      <div onClick={() => onConfirm(false)} className='modal-delete'>
         <div className='container'>
           <div className='modal-header'>
             <div className='modal-title'>
@@ -25,9 +24,9 @@ function DeleteModal(props) {
           <div class='modal-body'>
             <p>Are You Sure You Want to Continue?</p>
           </div>
-          <div class='modal-footer'>
-            <button onClick={() => setModalDelete(true)}>yes</button>
-            <button onClick={() => setModalDelete(false)}>no</button>
+          <div onClick={(e) => e.stopPropagation()} class='modal-footer'>
+            <button onClick={() => onConfirm(true)}>yes</button>
+            <button onClick={() => onConfirm(false)}>no</button>
           </div>
         </div>
       </div>
