@@ -5,6 +5,7 @@ import cocktailRouter from "./routers/CocktailRouter";
 import cors from 'cors';
 import { Logger } from "./utils/Logger";
 import settingsRouter from "./routers/SettingsRouter";
+import categoryRouter from "./routers/CategoryRouter";
 
 
 const PORT = process.env.PORT || 8080;
@@ -21,6 +22,7 @@ DataContext.connect().then(
         app.use('/api/ingredients', ingredientRouter);
         app.use('/api/cocktails', cocktailRouter);
         app.use('/api/settings', settingsRouter);
+        app.use('/api/categories', categoryRouter);
         app.listen(PORT, () => {
                 console.log(`Cocktails app listening on port ${PORT}!`)
             },

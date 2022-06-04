@@ -11,6 +11,7 @@ export class Cocktail extends mongoose.Document {
             amount: number;
         }
     ];
+    cocktails:[];
     image: string;
 }
 
@@ -24,6 +25,9 @@ const cocktailSchema: mongoose.Schema = new mongoose.Schema({
         ingredient: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingredients' },
         amount: Number,
     }],
+    categories: [
+        { type: mongoose.Schema.Types.ObjectId, ref: 'Categories' },
+    ],
     recipe: {
         type: String,
         required: true,

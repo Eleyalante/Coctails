@@ -4,6 +4,16 @@ export const COCKTAIL_CREATE_SCHEMA = {
         "name": { "type": "string", "minLength": 3 },
         "recipe": { "type": "string", "minLength": 3 },
         "image": { "type": "string" },
+        "categories": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "category": { "type": "string" },
+                },
+                "required": ["category"]
+            },
+        },
         "ingredients": {
             "type": "array",
             "items": {
@@ -19,10 +29,10 @@ export const COCKTAIL_CREATE_SCHEMA = {
     "required": ["name", "recipe", "ingredients"]
 };
 
-export const COCKTAIL_UPDATE_SCHEMA ={
+export const COCKTAIL_UPDATE_SCHEMA = {
     "type": "object",
     "properties": {
-        "id":{"type":"string"},
+        "id": { "type": "string" },
         "name": { "type": "string", "minLength": 3 },
         "recipe": { "type": "string", "minLength": 3 },
         "image": { "type": "string" },
@@ -36,7 +46,17 @@ export const COCKTAIL_UPDATE_SCHEMA ={
                 },
                 "required": ["ingredient", "amount"]
             },
-        }
+        },
+        "categories": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "category": { "type": "string" },
+                },
+                "required": ["category"]
+            },
+        },
     },
-    "required": ["id","name", "recipe", "ingredients"]
+    "required": ["id", "name", "recipe", "ingredients"]
 }
