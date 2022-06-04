@@ -21,14 +21,20 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
 
     async update(item: Cocktail): Promise<mongodb.UpdateResult>{
-        return this._model.findOneAndUpdate(
-            {id:item.id},{
-                name:item.name,
-                image:item.image,
-                recipe:item.recipe,
-                ingredients:item.ingredients
-            }
-        );
+        let exists = await this._model.exists({name: item.name});
+        if (exists != null) {
+            throw new Error("Cocktail with this name already exists");
+        } else {
+            return this._model.updateOne(
+                {'_id':item.id},{
+                    name:item.name,
+                    image:item.image,
+                    recipe:item.recipe,
+                    ingredients:item.ingredients
+                }
+            );
+        }
+      
     }
 
     override async all() : Promise<Cocktail[]>{

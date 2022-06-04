@@ -3,8 +3,7 @@ import {ApiResponse} from "../models/ApiResponse";
 import express from "express";
 import {Ingredient} from "../models/Ingredient";
 import {BaseController} from "./BaseController";
-import { ParamsDictionary } from "express-serve-static-core";
-import { ParsedQs } from "qs";
+import { INGREDIENT_UPDATE_SCHEMA } from "../schemas/IngredientSchema";
 
 export class IngredientController extends BaseController<IngredientRepository> {
 
@@ -54,11 +53,9 @@ export class IngredientController extends BaseController<IngredientRepository> {
     async update(req: express.Request, res: express.Response) {
         let result: ApiResponse<Ingredient>;
         try {
+            this.validateReqBody(INGREDIENT_UPDATE_SCHEMA, req.body);
             const input: Ingredient = req.body;
-            if (this.isNullOrEmpty(input.name) || this.isNullOrEmpty(input.unit)) {
-                result = new ApiResponse<Ingredient>(null, false, 'Wrong request input');
-                return this.error(res, result);
-            }
+
             let updateResult = await this._repository.update(input);
             console.log(updateResult);
             const cocktail = await this._repository.getById(input.id);
@@ -118,20 +115,18 @@ export class IngredientController extends BaseController<IngredientRepository> {
 
 
     async create(req: express.Request, res: express.Response) {
-        const input = req.body;
         let result: ApiResponse<Ingredient>;
-        if (this.isNullOrEmpty(input.name) || this.isNullOrEmpty(input.unit)) {
-            result = new ApiResponse<Ingredient>(null, false, 'Wrong request input');
+        try {
+            this.validateReqBody(INGREDIENT_UPDATE_SCHEMA, req.body);
+            const input: Ingredient = req.body;
+
+            const ingredient = await this._repository.create(input);
+
+            result = new ApiResponse<Ingredient>(ingredient, true);
+            return this.ok(res, result);
+        } catch (e) {
+            result = new ApiResponse<Ingredient>(null, false, e.toString());
             return this.error(res, result);
-        } else {
-            try {
-                const ingredient = await this._repository.create(input);
-                result = new ApiResponse<Ingredient>(ingredient, true);
-                return this.ok(res, result);
-            } catch (e) {
-                result = new ApiResponse<Ingredient>(null, false, e.toString());
-                return this.error(res, result);
-            }
         }
     }
 }

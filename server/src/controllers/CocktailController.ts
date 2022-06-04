@@ -4,7 +4,8 @@ import {ApiResponse} from "../models/ApiResponse";
 import express from "express";
 import {Cocktail} from "../models/Cocktail";
 import { IngredientRepository } from "../repositories/IngredientRepository";
-
+import Ajv from "ajv";
+import { COCKTAIL_UPDATE_SCHEMA, COCKTAIL_CREATE_SCHEMA } from "../schemas/CocktailSchema";
 
 export class CocktailController extends BaseController<CocktailRepository> {
 
@@ -37,16 +38,20 @@ export class CocktailController extends BaseController<CocktailRepository> {
     async update(req: express.Request, res: express.Response) {
         let result: ApiResponse<Cocktail>;
         try {
+            this.validateReqBody(COCKTAIL_UPDATE_SCHEMA, req.body);
             const input: Cocktail = req.body;
-            if (this.isNullOrEmpty(input.name) || this.isNullOrEmpty(input.recipe) || input.ingredients.length < 1) {
-                result = new ApiResponse<Cocktail>(null, false, 'Wrong request input');
-                return this.error(res, result);
-            }
+
             let updateResult = await this._repository.update(input);
-            console.log(updateResult);
-            const cocktail = await this._repository.getById(input.id);
-            result = new ApiResponse<Cocktail>(cocktail, true);
-            return this.ok(res, result);
+            if(updateResult.modifiedCount == 1){
+                console.log(updateResult);
+                const cocktail = await this._repository.getById(input.id);
+                console.log(cocktail);
+                result = new ApiResponse<Cocktail>(cocktail, true);
+                return this.ok(res, result);
+            }else{
+                console.log(updateResult);
+                throw new Error('Update failed')
+            }
         } catch (e) {
             result = new ApiResponse<Cocktail>(null, false, e.toString());
             return this.error(res, result);
@@ -87,11 +92,13 @@ export class CocktailController extends BaseController<CocktailRepository> {
     async create(req: express.Request, res: express.Response) {
         let result: ApiResponse<Cocktail>;
         try {
-            const input: Cocktail = req.body;
-            if (this.isNullOrEmpty(input.name) || this.isNullOrEmpty(input.recipe) || input.ingredients.length < 1) {
-                result = new ApiResponse<Cocktail>(null, false, 'Wrong request input');
-                return this.error(res, result);
+            const ajv = new Ajv();
+            const valid = ajv.validate(COCKTAIL_CREATE_SCHEMA, req.body);
+            if(!valid){
+                console.log(ajv.errors);
+                return  this.error(res, new ApiResponse<Cocktail>(null, false, ajv.errorsText()));
             }
+            const input: Cocktail = req.body;
             const cocktail = await this._repository.create(input);
             result = new ApiResponse<Cocktail>(cocktail, true);
             return this.ok(res, result);

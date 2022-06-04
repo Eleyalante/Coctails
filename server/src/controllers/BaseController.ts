@@ -1,5 +1,6 @@
+import Ajv from "ajv";
 import express from "express";
-import {ApiResponse} from "../models/ApiResponse";
+import { ApiResponse } from "../models/ApiResponse";
 
 export abstract class BaseController<BaseRepository> {
 
@@ -39,8 +40,18 @@ export abstract class BaseController<BaseRepository> {
     }
 
 
-    isNullOrEmpty(value: any):boolean{
+    isNullOrEmpty(value: any): boolean {
         return value === undefined || value === null || value.length < 1;
+    }
+
+
+    validateReqBody(schema: Object, body: any): void{
+        const ajv = new Ajv();
+        const valid = ajv.validate(schema, body);
+        if (!valid) {
+            console.log(ajv.errors);
+           throw new Error(ajv.errorsText());
+        }
     }
 
 
