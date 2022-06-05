@@ -131,7 +131,11 @@ class AddIngredient extends React.Component {
         if (file === undefined) {
             return;
         }
-        //TODO handle max size of file
+        let fileMb = file.size/1024/1024;
+        if(fileMb > 10){
+            this.showErrorDialog('File size must be less than 10MB');
+            return;
+        }
         const base64 = await this.convertBase64(file)
         this.setState({
             image: base64
