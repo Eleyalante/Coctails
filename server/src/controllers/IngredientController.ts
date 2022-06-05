@@ -133,6 +133,7 @@ export class IngredientController extends BaseController<IngredientRepository> {
             result = new ApiResponse<Ingredient>(ingredient, true);
             return this.ok(res, result);
         } catch (e) {
+            console.log(e);
             result = new ApiResponse<Ingredient>(null, false, e.toString());
             return this.error(res, result);
         }
