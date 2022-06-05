@@ -1,96 +1,181 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import DeleteModal from "../../common/DeleteModal";
+import EditModal from "../../common/EditModal/EditModal";
+import DeleteModal from "../../common/DeleteModal/DeleteModal";
+import { Button, Modal, ModalTitle } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen, faTrash } from "@fortawesome/free-solid-svg-icons";
 const url = "http://localhost:8080/api";
 
-function Table(list, colNames) {
-  const [api, setApi] = useState([]);
-  const [confirm, setConfirm] = useState({
-    isLoading: false,
-  });
-  // --------------------------------------GET DATA FROM SERVER---------------------------
+function Table() {
+    const [Data, setData] = useState([]);
+    const [RowData, SetRowData] = useState([]);
 
-  useEffect(() => {
-    try {
-      axios.get(`${url}/ingredients/all`).then((res) => {
-        setApi(res.data);
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }, [url]);
+    const [ViewShow, SetViewShow] = useState(false);
+    const handleViewShow = () => {
+        SetViewShow(true);
+    };
+    const handleViewClose = () => {
+        SetViewShow(false);
+    };
+    //FOr Edit Model
+    const [ViewEdit, SetEditShow] = useState(false);
+    const handleEditShow = () => {
+        SetEditShow(true);
+    };
+    const handleEditClose = () => {
+        SetEditShow(false);
+    };
+    //FOr Delete Model
+    const [ViewDelete, SetDeleteShow] = useState(false);
+    const handleDeleteShow = () => {
+        SetDeleteShow(true);
+    };
+    const handleDeleteClose = () => {
+        SetDeleteShow(false);
+    };
+    //FOr Add New Data Model
+    const [ViewPost, SetPostShow] = useState(false);
+    const handlePostShow = () => {
+        SetPostShow(true);
+    };
+    const hanldePostClose = () => {
+        SetPostShow(false);
+    };
+    //For delete modal
 
-  // --------------------------------------REMOVE---------------------------
-  // --------------------------------------Delete Form---------------------------
-  const handleConfirm = (isLoading) => {
-    setConfirm({
-      isLoading,
+    //Define here local state that store the form Data
+    const [name, setname] = useState("");
+    const [unit, setUnit] = useState("");
+    const [image, setImage] = useState("");
+    const [id, setId] = useState("");
+    const [Delete, setDelete] = useState(false);
+
+    //For edit modal
+    const [edit, setEdit] = useState({
+        isLoading: false,
     });
-  };
-  const idProductRef = useRef();
-  const handleRemoveFields = (id, e) => {
-    handleConfirm(true);
-    idProductRef.current = id;
-  };
-  const areUSureDelete = (choose) => {
-    if (choose) {
-      axios
-        .delete(`${url}/ingredients/delete?id=${idProductRef.current}`)
-        .then((res) => {
-          //refresh the page
-          window.location.reload(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    // --------------------------------------GET DATA FROM SERVER---------------------------
 
-      handleConfirm("", false);
-    } else {
-      handleConfirm("", false);
-    }
-  };
-  let content = null;
+    const getIngredientData = () => {
+        try {
+            axios.get(`${url}/ingredients/all`).then((res) => {
+                setData(res.data);
+            });
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
-  if (api) {
-    content = (
-      <section className='home-show'>
-        <table className='table'>
-          <thead className='table-head'>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Unit</th>
-              <th>Image</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody className='table-body'>
-            {api.data?.map((item, index) => (
-              <tr key={index}>
-                <th>{index}</th>
-                <th>{item.name}</th>
-                <th>{item.unit}</th>
-                <th>{item.image}</th>
-                <th className='btns'>
-                  <button onClick={() => handleRemoveFields(item.id)}>
-                    <FontAwesomeIcon icon={faTrash} />
-                  </button>
-                  <button>
-                    <FontAwesomeIcon icon={faPen} />
-                  </button>
-                </th>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {confirm.isLoading && <DeleteModal onConfirm={areUSureDelete} />}
-      </section>
+    // --------------------------------------REMOVE---------------------------
+    // --------------------------------------Delete Form---------------------------
+    // --------------------------------------handle remove---------------------------
+
+    // console.log(id)
+    const handleRemove = () => {
+        console.log(RowData);
+        axios
+            .delete(`${url}/ingredients/delete?id=${id}`)
+            .then((res) => {
+                //refresh the page
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    useEffect(() => {
+        getIngredientData();
+    }, []);
+
+    //handle edit
+    const handleEdit = () => {
+        const Credentials = { name, unit, image };
+        axios
+            .put(`${url}/ingredients/delete?id=${id}`, Credentials)
+            .then((res) => {
+                window.location.reload();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+
+    return (
+        <div className="home-show">
+            <div className="row">
+                <div className="table">
+                    <table className="table-head">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody className="table-body">
+                            {Data.data?.map((item) => (
+                                <tr key={item.id}>
+                                    <th>{item.name}</th>
+                                    <th>{item.unit}</th>
+                                    <th>{item.image}</th>
+                                    <th style={{ minWidth: 190 }}>
+                                        {/* <Button
+                                                onClick={() => {
+                                                    handleViewShow(SetRowData(item));
+                                                }}
+                                            >
+                                                View
+                                            </Button>
+                                            | */}
+                                        <Button
+                                            onClick={() => {
+                                                handleEditShow(SetRowData(item), setId(item.id));
+                                            }}
+                                        >
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            onClick={() => {
+                                                handleViewShow(SetRowData(item), setId(item.id), setDelete(true));
+                                            }}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </th>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                {/* View Modal */}
+                <div className="model-box-view">
+                    <Modal show={ViewShow} onHide={handleViewClose} backdrop="static" keyboard={false}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>View Employee Data</Modal.Title>
+                        </Modal.Header>
+                        {/* ----------------------Delete Modal----------------------*/}
+                        <DeleteModal Delete={Delete} handleRemove={handleRemove} RowData={RowData} handleViewClose={handleViewClose} />
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={handleViewClose}>
+                                Close
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>
+
+                {/* Modal for Edit employee record */}
+                <div className="model-box-view">
+                    <Modal show={ViewEdit} onHide={handleEditClose} backdrop="static" keyboard={false}>
+                        {/* ----------------------Edit Modal----------------------*/}
+
+                        <EditModal setname={setname} setUnit={setUnit} setImage={setImage} handleEditClose={handleEditClose} handleViewClose={handleViewClose} RowData={RowData} />
+                    </Modal>
+                </div>
+            </div>
+        </div>
     );
-  }
-
-  return <div>{content}</div>;
 }
 
 export default Table;
