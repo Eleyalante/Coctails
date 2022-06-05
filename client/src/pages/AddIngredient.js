@@ -5,6 +5,8 @@ import {faPen, faTrash, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {useParams} from 'react-router-dom';
 import {IngredientService} from "../services/IngredientService";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ConfirmDialog from "../components/ConfirmDialog";
+import ErrorDialog from "../components/ErrorDialog";
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()}/>;
@@ -16,12 +18,32 @@ class AddIngredient extends React.Component {
     constructor(props) {
         super(props);
         let id = this.props.params.id === undefined ? '' : this.props.params.id;
-        this.state = {name: '', nameError: false, unit: '', unitError: false, loading: id !== '', id: id, image: ''};
+        this.state = {
+            name: '',
+            nameError: false,
+            unit: '',
+            unitError: false,
+            loading: id !== '',
+            id: id,
+            image: '',
+            confirmDialogOpen: false,
+            errorDialogOpen: false,
+            error: ''
+        };
         this.fetchIngredient = this.fetchIngredient.bind(this);
         this.handleUnitChange = this.handleUnitChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.submit = this.submit.bind(this);
         this.handleFileRead = this.handleFileRead.bind(this);
+        this.showErrorDialog = this.showErrorDialog.bind(this);
+    }
+
+    showErrorDialog(error) {
+        this.setState({
+            error: error,
+            errorDialogOpen: true,
+            loading: false
+        })
     }
 
     fetchIngredient() {
@@ -29,42 +51,52 @@ class AddIngredient extends React.Component {
         service.fetchIngredient(this.state.id).then((res) => {
             if (res.success) {
                 this.setState({
-                    loading: false,
-                    name: res.data.name,
-                    unit: res.data.unit
+                    loading: false, name: res.data.name, unit: res.data.unit
                 })
+            } else {
+                this.showErrorDialog(res.error);
             }
-            //todo handle error
         })
 
     };
 
+    delete() {
+        let service = new IngredientService();
+        this.setState({
+            loading: true, confirmDialogOpen: false
+        })
+        service.deleteIngredient(this.state.id).then((res) => {
+            console.log(res);
+            if (res.success) {
+                window.location.href = '/ingredients';
+            } else {
+                console.log(res);
+                this.showErrorDialog(res.error);
+            }
+        })
+
+    }
+
     submit() {
         this.setState({
-            nameError: this.state.name.length === 0,
-            unitError: this.state.unit.length === 0,
+            nameError: this.state.name.length === 0, unitError: this.state.unit.length === 0,
         })
         if (this.state.unitError || this.state.nameError) {
             return;
         }
         let service = new IngredientService();
         let body = {
-            'name':this.state.name,
-            'unit':this.state.unit,
-            'image':this.state.image
+            'name': this.state.name, 'unit': this.state.unit, 'image': this.state.image
         };
         this.setState({
-            loading:true
+            loading: true
         })
         service.createIngredient(body).then((res) => {
             console.log(res);
-            if(res.success){
+            if (res.success) {
                 window.location.href = '/ingredients';
-            }else{
-                this.setState({
-                    loading:true
-                })
-                // todo handle
+            } else {
+                this.showErrorDialog(res.error);
             }
         });
     }
@@ -96,13 +128,13 @@ class AddIngredient extends React.Component {
 
     handleFileRead = async (event) => {
         const file = event.target.files[0]
-        if(file === undefined){
+        if (file === undefined) {
             return;
         }
         //TODO handle max size of file
         const base64 = await this.convertBase64(file)
         this.setState({
-            image:base64
+            image: base64
         })
     }
 
@@ -115,53 +147,70 @@ class AddIngredient extends React.Component {
 
 
     render() {
-        return <div
-            style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                transform: 'translate(-50%, -50%)'
-            }}
-        > {this.state.loading ? <LoadingSpinner/> : <Card sx={{minWidth: 400}} elevation={2} justify="center">
-            <CardContent>
-                <TextField
-                    error={this.state.nameError}
-                    id="outlined-required"
-                    label="Name"
-                    value={this.state.name}
-                    onChange={this.handleNameChange}
-                    fullWidth
-                />
-                <Box marginTop='10px'/>
-                <TextField
-                    error={this.state.unitError}
-                    id="outlined-required"
-                    label="Unit"
-                    value={this.state.unit}
-                    onChange={this.handleUnitChange}
-                    fullWidth
-                />
-                <>
-                    <Input
-                        style={{display: "none"}}
-                        id="contained-button-file"
-                        inputProps={{accept: 'image/*, .svg'}}
-                        onChange={e => this.handleFileRead(e)}
-                        type="file"
-                    />
-                    <label htmlFor="contained-button-file">
-                        <Button variant="contained" style={{marginTop: '30px'}} color="primary" fullWidth component="span"     startIcon={<FontAwesomeIcon
-                            icon={this.state.id === '' ? faPlus : faPen}/>}>{this.state.id === '' ? 'Add image' : 'Update image'}
-                        </Button>
-                    </label>
-                </>
-                <Button variant="contained" fullWidth style={{marginTop: '20px'}} onClick={this.submit}
-                        startIcon={<FontAwesomeIcon
-                            icon={this.state.id === '' ? faPlus : faPen}/>}>{this.state.id === '' ? 'Add' : 'Update'} </Button>
-                {this.state.id === '' ? null : <Button variant="contained" fullWidth style={{marginTop: '20px'}}
-                                                       startIcon={<FontAwesomeIcon icon={faTrash}/>}> Delete </Button>}
-            </CardContent>
-        </Card>}</div>;
+        return <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80%', width:'100%'}} >
+            {this.state.loading ? <LoadingSpinner/> :
+                <Card elevation={2}  justify="center" style={{maxWidth: '550px', margin: '10px'}}>
+                    <CardContent >
+                        <TextField
+                            error={this.state.nameError}
+                            id="outlined-required"
+                            label="Name"
+                            value={this.state.name}
+                            onChange={this.handleNameChange}
+                            fullWidth
+                        />
+                        <Box marginTop='10px'/>
+                        <TextField
+                            error={this.state.unitError}
+                            id="outlined-required"
+                            label="Unit"
+                            value={this.state.unit}
+                            onChange={this.handleUnitChange}
+                            fullWidth
+                        />
+                        <>
+                            <Input
+                                style={{display: "none"}}
+                                id="contained-button-file"
+                                inputProps={{accept: 'image/*, .svg'}}
+                                onChange={e => this.handleFileRead(e)}
+                                type="file"
+                            />
+                            <label htmlFor="contained-button-file">
+                                <Button variant="contained" style={{marginTop: '30px'}} color="primary" fullWidth
+                                        component="span" startIcon={<FontAwesomeIcon
+                                    icon={this.state.id === '' ? faPlus : faPen}/>}>{this.state.id === '' ? 'Add image' : 'Update image'}
+                                </Button>
+                            </label>
+                        </>
+                        <Button variant="contained" fullWidth style={{marginTop: '20px'}} onClick={this.submit}
+                                startIcon={<FontAwesomeIcon
+                                    icon={this.state.id === '' ? faPlus : faPen}/>}>{this.state.id === '' ? 'Add' : 'Update'} </Button>
+                        {this.state.id === '' ? null :
+                            <Button variant="contained" fullWidth style={{marginTop: '20px'}} onClick={() => {
+                                this.setState({
+                                    confirmDialogOpen: true
+                                });
+                            }}
+                                    startIcon={<FontAwesomeIcon icon={faTrash}/>}> Delete </Button>}
+                    </CardContent>
+                </Card>}
+            <ConfirmDialog title={`Ingredient: ${this.state.name}`}
+                           body='Are you sure you want to delete this ingredient?' confirm={() => this.delete()}
+                           handleClose={() => {
+                               this.setState({
+                                   confirmDialogOpen: false
+                               });
+                           }} isOpen={this.state.confirmDialogOpen}/>
+            <ErrorDialog isOpen={this.state.errorDialogOpen}
+                         body={this.state.error}
+                         handleClose={() => {
+                             this.setState({
+                                 errorDialogOpen: false
+                             });
+                         }}
+            />
+        </div>;
     }
 }
 

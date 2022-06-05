@@ -8,7 +8,7 @@ export class IngredientService extends  BaseService{
             let result = await axios.get(`${this.url}/ingredients/all`);
             return result.data;
         } catch (err) {
-            return err;
+            return err.response.data;
         }
     };
 
@@ -19,7 +19,7 @@ export class IngredientService extends  BaseService{
             let result = await axios.get(fetchUrl);
             return result.data;
         } catch (err) {
-            return err;
+            return err.response.data;
         }
     };
 
@@ -30,7 +30,17 @@ export class IngredientService extends  BaseService{
             console.log(result);
             return result.data;
         } catch (err) {
-            return err;
+            return err.response.data;
+        }
+    }
+
+    async deleteIngredient(id){
+        try {
+            let fetchUrl = `${this.url}/ingredients/delete?id=${id}`;
+            let result = await axios.delete(fetchUrl);
+            return result.data;
+        } catch (err) {
+            return err.response.data;
         }
     }
 }
