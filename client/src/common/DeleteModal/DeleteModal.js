@@ -34,7 +34,7 @@ function DeleteModal({ Delete, handleRemove, RowData, handleViewClose }) {
                             <input type="text" value={RowData.image} readOnly />
                         </div>
                     </div>
-                    <div onClick={(e) => e.stopPropagation()} className="modal-footer btns">
+                    <div onClick={(e) => e.stopPropagation()} className="modal-footer ">
                         {Delete && (
                             <Button type="submit" className="btn-delete" onClick={handleRemove}>
                                 Delete

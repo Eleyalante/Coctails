@@ -50,6 +50,7 @@ function Table() {
     const [image, setImage] = useState("");
     const [id, setId] = useState("");
     const [Delete, setDelete] = useState(false);
+    const [Update, setUpdate] = useState("");
 
     //For edit modal
     const [edit, setEdit] = useState({
@@ -90,12 +91,26 @@ function Table() {
     }, []);
 
     //handle edit
-    const handleEdit = () => {
-        const Credentials = { name, unit, image };
+    const handleUpdate = () => {
+        const Credentials = { id, name, unit, image };
+        // console.log(Data.data.data);
+        // console.log(data);
+        console.log("id", id);
+
         axios
-            .put(`${url}/ingredients/delete?id=${id}`, Credentials)
+            .post(`${url}/ingredients/update?id=${id}`, Credentials)
             .then((res) => {
-                window.location.reload();
+                console.log("Credentials", Credentials);
+                const data = Data.data?.map((item) => {
+                    if (item.id === id) {
+                        return item;
+                    } else {
+                        return "";
+                    }
+                });
+                console.log(data);
+
+                // window.location.reload();
             })
             .catch((err) => {
                 console.log(err);
@@ -170,7 +185,15 @@ function Table() {
                     <Modal show={ViewEdit} onHide={handleEditClose} backdrop="static" keyboard={false}>
                         {/* ----------------------Edit Modal----------------------*/}
 
-                        <EditModal setname={setname} setUnit={setUnit} setImage={setImage} handleEditClose={handleEditClose} handleViewClose={handleViewClose} RowData={RowData} />
+                        <EditModal
+                            setname={setname}
+                            setUnit={setUnit}
+                            setImage={setImage}
+                            handleEditClose={handleEditClose}
+                            handleViewClose={handleViewClose}
+                            RowData={RowData}
+                            handleUpdate={handleUpdate}
+                        />
                     </Modal>
                 </div>
             </div>

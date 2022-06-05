@@ -11,7 +11,7 @@ import categoryRouter from "./routers/CategoryRouter";
 const PORT = process.env.PORT || 8080;
 const app = express();
 
-app.use(json());
+app.use(json({limit:'15mb'}))
 app.use(urlencoded({extended: true}));
 app.use(cors());
 app.use(new Logger().LogRequest);
