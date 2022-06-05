@@ -99,6 +99,7 @@ class AddIngredient extends React.Component {
         if(file === undefined){
             return;
         }
+        //TODO handle max size of file
         const base64 = await this.convertBase64(file)
         this.setState({
             image:base64
