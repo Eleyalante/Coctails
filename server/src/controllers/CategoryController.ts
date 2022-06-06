@@ -1,10 +1,11 @@
-import {CategoryRepository} from "../repositories/CategoryRepository";
-import {ApiResponse} from "../models/ApiResponse";
+import { CategoryRepository } from "../repositories/CategoryRepository";
+import { ApiResponse } from "../models/ApiResponse";
 import express from "express";
-import {Ingredient} from "../models/Ingredient";
-import {BaseController} from "./BaseController";
-import {Category} from "../models/Category";
+import { Ingredient } from "../models/Ingredient";
+import { BaseController } from "./BaseController";
+import { Category } from "../models/Category";
 import { CATEGORY_CREATE_SCHEMA, CATEGORY_UPDATE_SCHEMA } from "../schemas/CategorySchema";
+import { CocktailRepository } from "../repositories/CocktailRepository";
 
 export class CategoryController extends BaseController<CategoryRepository> {
 
@@ -21,9 +22,11 @@ export class CategoryController extends BaseController<CategoryRepository> {
                 return this.error(res, result);
             }
             let id = req.query.id.toString();
+            var cocktailRepository = new CocktailRepository();
+            await cocktailRepository.removeCategoryFromCocktail(id);
             const deleteResult = await this._repository.delete(id);
-            if(deleteResult == null){
-                result = new ApiResponse<boolean>(false, false,'Delete was not successfully');
+            if (deleteResult == null) {
+                result = new ApiResponse<boolean>(false, false, 'Delete was not successfully');
                 return this.error(res, result);
             }
             result = new ApiResponse<boolean>(deleteResult.acknowledged, true);
