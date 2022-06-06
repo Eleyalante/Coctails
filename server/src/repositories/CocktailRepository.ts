@@ -45,6 +45,14 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
     }
 
+    async removeCategoryFromCocktail(id: string) : Promise<mongodb.UpdateResult>{
+        return this._model.updateMany( { categories: {$in:id}}, {
+            $pull: {
+                categories: id
+            }
+        });
+    }
+
     override async all(): Promise<Cocktail[]> {
         return this._model.find({}).populate('ingredients.ingredient').populate('categories');
     }
