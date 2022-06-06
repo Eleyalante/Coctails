@@ -7,15 +7,12 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import MailIcon from '@mui/icons-material/Mail';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import MoreIcon from '@mui/icons-material/MoreVert';
-import {Fab} from "@mui/material";
-import {faAppleAlt, faMartiniGlassCitrus} from "@fortawesome/free-solid-svg-icons";
+import {primaryColor} from '../utils/Values';
+import {faAppleAlt, faMartiniGlassCitrus, faAlignJustify,faBookSkull} from "@fortawesome/free-solid-svg-icons";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -104,16 +101,25 @@ export default function NavigationBar() {
                 >
                     Ingredients
                 </Button>
+            <Button
+                startIcon={<FontAwesomeIcon icon={faAlignJustify}/>}
+                size="large"
+                fullWidth
+                href="/categories"
+                color="inherit"
+            >
+                Categories
+            </Button>
         </Menu>
     );
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static">
+            <AppBar position="static" style={{backgroundColor:primaryColor}}>
                 <Toolbar>
                     <Typography variant="h6">
-                        <img src='/images/Logo.png' height={64} alt='logo'
-                             style={{marginLeft: '10px', justifyContent: 'center'}}/>
+                        <img src='/images/Logo_2.png' height={64} alt='logo'
+                             style={{marginTop: '5px', justifyContent: 'center'}}/>
                     </Typography>
                     <Search>
                         <SearchIconWrapper>
@@ -138,6 +144,13 @@ export default function NavigationBar() {
                             href="/ingredients"
                             color="inherit">
                             Ingredients
+                        </Button>
+                        <Button
+                            startIcon={<FontAwesomeIcon icon={faBookSkull}/>}
+                            size="large"
+                            href="/categories"
+                            color="inherit">
+                            Categories
                         </Button>
                     </Box>
                     <Box sx={{display: {xs: 'flex', md: 'none'}}}>

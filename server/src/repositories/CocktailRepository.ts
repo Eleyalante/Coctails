@@ -1,6 +1,6 @@
 
-import CocktailModel, {Cocktail} from "../models/Cocktail";
-import {BaseRepository} from "./BaseRepository";
+import CocktailModel, { Cocktail } from "../models/Cocktail";
+import { BaseRepository } from "./BaseRepository";
 import * as mongodb from "mongodb";
 
 
@@ -11,14 +11,14 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
     }
 
 
-    async getByIngredient(id: string) : Promise<Cocktail[]>{
-        let result = this._model.find({"ingredients.ingredient": id}).populate('ingredients.ingredient').populate('categories');
+    async getByIngredient(id: string): Promise<Cocktail[]> {
+        let result = this._model.find({ "ingredients.ingredient": id }).populate('ingredients.ingredient').populate('categories');
         console.log(result);
         return result;
     }
 
     async getByName(nameValue: string): Promise<Cocktail> {
-        return this._model.findOne({name:nameValue});
+        return this._model.findOne({ name: nameValue });
     }
 
 
@@ -27,30 +27,30 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
     }
 
 
-    async update(item: Cocktail): Promise<mongodb.UpdateResult>{
-        let exists = await this._model.exists({name: item.name, '_id': {$ne:item.id}});
+    async update(item: Cocktail): Promise<mongodb.UpdateResult> {
+        let exists = await this._model.exists({ name: item.name, '_id': { $ne: item.id } });
         if (exists != null) {
             throw new Error("Cocktail with this name already exists");
         } else {
             return this._model.updateOne(
-                {'_id':item.id},{
-                    name:item.name,
-                    image:item.image,
-                    recipe:item.recipe,
-                    ingredients:item.ingredients,
-                    categories:item.categories
-                }
+                { '_id': item.id }, {
+                name: item.name,
+                image: item.image,
+                recipe: item.recipe,
+                ingredients: item.ingredients,
+                categories: item.categories
+            }
             );
         }
-      
+
     }
 
-    override async all() : Promise<Cocktail[]>{
+    override async all(): Promise<Cocktail[]> {
         return this._model.find({}).populate('ingredients.ingredient').populate('categories');
     }
 
     override async create(item: Cocktail): Promise<Cocktail> {
-        let exists = await this._model.exists({name: item.name});
+        let exists = await this._model.exists({ name: item.name });
         if (exists != null) {
             throw new Error("Cocktail with this name already exists");
         } else {

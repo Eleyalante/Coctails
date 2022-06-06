@@ -1,19 +1,19 @@
-import React from "react";
+import React from 'react';
 import LoadingSpinner from "../components/LoadingSpinner";
 import {Grid} from "@mui/material";
-import IngredientService from "../services/IngredientService";
 import ErrorDialog from "../components/ErrorDialog";
 import AddItemButton from "../components/AddItemButton";
-import IngredientCard from "../components/IngredientCard";
+import CategoryCard from "../components/CategoryCard";
 import NoData from "../components/NoData";
+import {errorState} from "../utils/Values";
+import CategoryService from "../services/CategoryService";
 
-
-export default class Ingredients extends React.Component {
+export default class Categories extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {ingredients: [], loading: true, errorDialogOpen: false, error: ''};
-        this.fetchIngredients = this.fetchIngredients.bind(this);
+        this.state = {loading: true, categories: [], ...errorState}
+        this.fetchCategories = this.fetchCategories.bind(this);
         this.showErrorDialog = this.showErrorDialog.bind(this);
     }
 
@@ -25,14 +25,15 @@ export default class Ingredients extends React.Component {
         })
     }
 
-    fetchIngredients() {
-        let service = new IngredientService();
-        service.fetchIngredients().then((res) => {
+    fetchCategories() {
+        let service = new CategoryService();
+        service.fetchCategories().then((res) => {
             if (res.success) {
                 this.setState({
+                    categories: res.data,
                     loading: false,
-                    ingredients: res.data
                 })
+                console.log(this.state);
             } else {
                 this.showErrorDialog(res.error);
             }
@@ -41,30 +42,29 @@ export default class Ingredients extends React.Component {
     };
 
     componentDidMount() {
-        this.fetchIngredients();
-    };
-
+        this.fetchCategories();
+    }
 
     render() {
-        return (this.state.loading ? (LoadingSpinner()) : (<div style={{margin: "20px"}}>
-            {this.state.ingredients.length === 0 ? <NoData/> : <Grid container justifyContent="center" spacing={5}>
-                {this.state.ingredients.map((value) => (
+        return (this.state.loading ? (LoadingSpinner()) : <div style={{margin: "20px"}}>
+            {this.state.categories.length !== 0 ? <Grid container justifyContent="center" spacing={5}>
+                {this.state.categories.map((value) => (
                     <Grid key={value.id} item lg={4} md={6} xs={12}>
-                        <IngredientCard ingredient={value}/>
+                        <CategoryCard category={value}/>
                     </Grid>
                 ))}
-            </Grid>}
-            <AddItemButton href='/add_ingredient'/>
+            </Grid>:<NoData/>
+
+            }
+            <AddItemButton href='/add_category'/>
             <ErrorDialog isOpen={this.state.errorDialogOpen}
                          body={this.state.error}
                          handleClose={() => {
                              this.setState({
                                  errorDialogOpen: false
                              });
-                         }}
-            />
-
-        </div>));
+                         }}/>
+        </div>);
     }
 
 }

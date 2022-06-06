@@ -88,6 +88,25 @@ export class CocktailController extends BaseController<CocktailRepository> {
         }
     }
 
+
+    async getByIngredient(req: express.Request, res: express.Response) {
+        let result: ApiResponse<Cocktail[]>;
+        try {
+            let id = req.query.id;
+            console.log(id);
+            if (this.isNullOrEmpty(id)) {
+                result = new ApiResponse<Cocktail[]>(null, false, 'Wrong ingredient ID format');
+                return this.error(res, result);
+            }
+            const cocktails = await this._repository.getByIngredient(id as string);
+            result = new ApiResponse<Cocktail[]>(cocktails, true);
+            return this.ok(res, result);
+        } catch (e) {
+            result = new ApiResponse<Cocktail[]>(null, false, e.toString());
+            return this.error(res, result);
+        }
+    }
+
     async create(req: express.Request, res: express.Response) {
         let result: ApiResponse<Cocktail>;
         try {

@@ -63,6 +63,9 @@ export class IngredientController extends BaseController<IngredientRepository> {
         try {
             this.validateReqBody(INGREDIENT_UPDATE_SCHEMA, req.body);
             const input: Ingredient = req.body;
+            if(this.isNullOrEmpty(input.image)){
+                input.image = '';
+            }
 
             let updateResult = await this._repository.update(input);
             console.log(updateResult);
