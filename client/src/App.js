@@ -1,10 +1,11 @@
 import NavigationBar from "./components/NavigationBar";
-import {Route, Routes} from "react-router-dom"
+import { Route, Routes } from "react-router-dom";
 import React from "react";
 import AddIngredient from "./pages/AddIngredient";
 import Ingredients from "./pages/Ingredients";
-import {ThemeProvider} from "@mui/material";
-import {mainTheme} from "./utils/Values";
+import Cocktails from "./pages/Cocktails";
+import { ThemeProvider } from "@mui/material";
+import { mainTheme } from "./utils/Values";
 import Categories from "./pages/Categories";
 import AddCategory from "./pages/AddCategory";
 import AddCocktail from "./pages/AddCocktail";
@@ -24,8 +25,8 @@ function App() {
                     <Route path='/add_category/:id' element={<AddCategory/>}/>
                     <Route path='/add_category' element={<AddCategory/>}/>
 
+                    <Route path="/cocktails" element={<Cocktails />} />
                     <Route path='/add_cocktail' element={<AddCocktail/>}/>
-
                     {/* <Route path='/category' element={<Category />} />
       <Route path='/cocktail' element={<Cocktail />} />
       <Route path='/searched/search' element={<Searched />} /> */}
