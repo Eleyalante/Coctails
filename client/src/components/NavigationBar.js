@@ -114,7 +114,7 @@ export default function NavigationBar() {
                     </Search>
                     <Box sx={{ flexGrow: 1 }} />
                     <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                        <Button startIcon={<FontAwesomeIcon icon={faMartiniGlassCitrus} />} size="large" color="inherit">
+                        <Button startIcon={<FontAwesomeIcon icon={faMartiniGlassCitrus} />} size="large" href="/cocktails" color="inherit">
                             Cocktails
                         </Button>
                         <Button startIcon={<FontAwesomeIcon icon={faAppleAlt} />} size="large" href="/ingredients" color="inherit">
