@@ -27,8 +27,16 @@ export class IngredientRepository extends BaseRepository<Ingredient> {
     }
 
     async update(item: Ingredient): Promise<mongodb.UpdateResult>{
+        if(item.image.length < 1){
+            return this._model.findOneAndUpdate(
+                {_id:item.id},{
+                    name:item.name,
+                    unit:item.unit
+                }
+            );
+        }
         return this._model.findOneAndUpdate(
-            {id:item.id},{
+            {_id:item.id},{
                 name:item.name,
                 image:item.image,
                 unit:item.unit

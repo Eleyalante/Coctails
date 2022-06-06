@@ -2,16 +2,16 @@ import React from "react";
 import {Button, Card, CardContent, TextField, Box, Input} from "@mui/material";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPen, faTrash, faPlus} from "@fortawesome/free-solid-svg-icons";
-import IngredientService from "../services/IngredientService";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ConfirmDialog from "../components/ConfirmDialog";
 import ErrorDialog from "../components/ErrorDialog";
 import withParams from "../utils/ComponentWithParams";
 import {addState} from "../utils/Values";
+import CategoryService from "../services/CategoryService";
 
 
 
-class AddIngredient extends React.Component {
+class AddCategory extends React.Component {
 
 
     constructor(props) {
@@ -20,19 +20,15 @@ class AddIngredient extends React.Component {
         this.state = {
             name: '',
             nameError: false,
-            unit: '',
-            unitError: false,
             loading: id !== '',
             id: id,
             image: '',
             ...addState
         };
-        this.fetchIngredient = this.fetchIngredient.bind(this);
-        this.handleUnitChange = this.handleUnitChange.bind(this);
+        this.fetchCategory = this.fetchCategory.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
-        this.delete = this.delete.bind(this);
         this.submit = this.submit.bind(this);
-        this.handleFileRead = this.handleFileRead.bind(this);
+        this.delete = this.delete.bind(this);
         this.showErrorDialog = this.showErrorDialog.bind(this);
     }
 
@@ -44,9 +40,9 @@ class AddIngredient extends React.Component {
         })
     }
 
-    fetchIngredient() {
-        let service = new IngredientService();
-        service.fetchIngredient(this.state.id).then((res) => {
+    fetchCategory() {
+        let service = new CategoryService();
+        service.fetchCategory(this.state.id).then((res) => {
             if (res.success) {
                 this.setState({
                     loading: false, name: res.data.name, unit: res.data.unit
@@ -59,14 +55,14 @@ class AddIngredient extends React.Component {
     };
 
     delete() {
-        let service = new IngredientService();
+        let service = new CategoryService();
         this.setState({
             loading: true, confirmDialogOpen: false
         })
-        service.deleteIngredient(this.state.id).then((res) => {
+        service.deleteCategory(this.state.id).then((res) => {
             console.log(res);
             if (res.success) {
-                window.location.href = '/ingredients';
+                window.location.href = '/categories';
             } else {
                 console.log(res);
                 this.showErrorDialog(res.error);
@@ -77,37 +73,37 @@ class AddIngredient extends React.Component {
 
     submit() {
         this.setState({
-            nameError: this.state.name.length === 0, unitError: this.state.unit.length === 0,
+            nameError: this.state.name.length === 0
         })
-        if (this.state.unitError || this.state.nameError) {
+        if (this.state.nameError) {
             return;
         }
-        let service = new IngredientService();
+        let service = new CategoryService();
         let body = {
-            'name': this.state.name, 'unit': this.state.unit, 'image': this.state.image
+            'name': this.state.name,
         };
         if(this.state.id !== ''){
             body = {
-                id:this.state.id, 'name': this.state.name, 'unit': this.state.unit, 'image': this.state.image
+                id:this.state.id, 'name': this.state.name
             };
         }
         this.setState({
             loading: true
         })
         if(this.state.id !== ''){
-            service.updateIngredient(body).then((res) => {
+            service.updateCategory(body).then((res) => {
                 console.log(res);
                 if (res.success) {
-                    window.location.href = '/ingredients';
+                    window.location.href = '/categories';
                 } else {
                     this.showErrorDialog(res.error);
                 }
             });
         }else{
-            service.createIngredient(body).then((res) => {
+            service.createCategory(body).then((res) => {
                 console.log(res);
                 if (res.success) {
-                    window.location.href = '/ingredients';
+                    window.location.href = '/categories';
                 } else {
                     this.showErrorDialog(res.error);
                 }
@@ -121,45 +117,10 @@ class AddIngredient extends React.Component {
         });
     };
 
-    handleUnitChange(e) {
-        this.setState({
-            unit: e.target.value
-        });
-    };
-
-    convertBase64 = (file) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(file)
-            fileReader.onload = () => {
-                resolve(fileReader.result);
-            }
-            fileReader.onerror = (error) => {
-                reject(error);
-            }
-        })
-    }
-
-    handleFileRead = async (event) => {
-        const file = event.target.files[0]
-        if (file === undefined) {
-            return;
-        }
-        let fileMb = file.size/1024/1024;
-        if(fileMb > 10){
-            this.showErrorDialog('File size must be less than 10MB');
-            return;
-        }
-        const base64 = await this.convertBase64(file)
-        this.setState({
-            image: base64
-        })
-    }
-
 
     componentDidMount() {
         if (this.state.id !== '') {
-            this.fetchIngredient();
+            this.fetchCategory();
         }
     }
 
@@ -177,30 +138,6 @@ class AddIngredient extends React.Component {
                             onChange={this.handleNameChange}
                             fullWidth
                         />
-                        <Box marginTop='10px'/>
-                        <TextField
-                            error={this.state.unitError}
-                            id="outlined-required"
-                            label="Unit"
-                            value={this.state.unit}
-                            onChange={this.handleUnitChange}
-                            fullWidth
-                        />
-                        <>
-                            <Input
-                                style={{display: "none"}}
-                                id="contained-button-file"
-                                inputProps={{accept: 'image/*, .svg'}}
-                                onChange={e => this.handleFileRead(e)}
-                                type="file"
-                            />
-                            <label htmlFor="contained-button-file">
-                                <Button variant="contained" style={{marginTop: '30px'}} color="primary" fullWidth
-                                        component="span" startIcon={<FontAwesomeIcon
-                                    icon={this.state.id === '' ? faPlus : faPen}/>}>{this.state.id === '' ? 'Add image' : 'Update image'}
-                                </Button>
-                            </label>
-                        </>
                         <Button variant="contained" fullWidth style={{marginTop: '20px'}} onClick={this.submit}
                                 startIcon={<FontAwesomeIcon
                                     icon={this.state.id === '' ? faPlus : faPen}/>}>{this.state.id === '' ? 'Add' : 'Update'} </Button>
@@ -213,8 +150,8 @@ class AddIngredient extends React.Component {
                                     startIcon={<FontAwesomeIcon icon={faTrash}/>}> Delete </Button>}
                     </CardContent>
                 </Card>}
-            <ConfirmDialog title={`Ingredient: ${this.state.name}`}
-                           body='Are you sure you want to delete this ingredient?' confirm={() => this.delete()}
+            <ConfirmDialog title={`Category: ${this.state.name}`}
+                           body='Are you sure you want to delete this category?' confirm={() => this.delete()}
                            handleClose={() => {
                                this.setState({
                                    confirmDialogOpen: false
@@ -232,4 +169,4 @@ class AddIngredient extends React.Component {
     }
 }
 
-export default withParams(AddIngredient);
+export default withParams(AddCategory);

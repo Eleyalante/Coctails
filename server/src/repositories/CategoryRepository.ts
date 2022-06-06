@@ -23,7 +23,7 @@ export class CategoryRepository extends BaseRepository<Category>{
     }
 
     override async all() : Promise<Category[]>{
-        return this._model.find({}).populate('cocktails').exec();
+        return this._model.find({});
     }
 
     override async create(item: Category): Promise<Category> {

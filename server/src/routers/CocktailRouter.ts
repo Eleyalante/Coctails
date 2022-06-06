@@ -8,6 +8,7 @@ const controller = new CocktailController(new CocktailRepository);
 
 cocktailRouter.get('/all', (req,res) => controller.all(req,res))
 cocktailRouter.get('/getById', (req,res) => controller.getById(req,res))
+cocktailRouter.get('/getByIngredient', (req,res) => controller.getByIngredient(req,res))
 
 
 cocktailRouter.delete('/delete', (req,res) => controller.delete(req,res))
