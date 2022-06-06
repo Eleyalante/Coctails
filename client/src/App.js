@@ -27,9 +27,8 @@ function App() {
 
                     <Route path="/cocktails" element={<Cocktails />} />
                     <Route path='/add_cocktail' element={<AddCocktail/>}/>
-                    {/* <Route path='/category' element={<Category />} />
-      <Route path='/cocktail' element={<Cocktail />} />
-      <Route path='/searched/search' element={<Searched />} /> */}
+
+                    <Route path="*" element={<Cocktails />} />
                 </Routes>
             </div>
         </ThemeProvider>
