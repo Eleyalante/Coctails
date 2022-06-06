@@ -31,6 +31,7 @@ class AddIngredient extends React.Component {
         this.handleUnitChange = this.handleUnitChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.delete = this.delete.bind(this);
+        this.submit = this.submit.bind(this);
         this.handleFileRead = this.handleFileRead.bind(this);
         this.showErrorDialog = this.showErrorDialog.bind(this);
     }
