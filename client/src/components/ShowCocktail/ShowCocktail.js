@@ -9,7 +9,6 @@ function Show() {
             <ScnHeader />
             <Header />
             <Table />
-            {/* <DeleteModal /> */}
         </div>
     );
 }

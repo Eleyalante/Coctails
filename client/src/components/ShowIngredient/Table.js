@@ -167,9 +167,6 @@ function Table() {
                 {/* View Modal */}
                 <div className="model-box-view">
                     <Modal show={ViewShow} onHide={handleViewClose} backdrop="static" keyboard={false}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>View Employee Data</Modal.Title>
-                        </Modal.Header>
                         {/* ----------------------Delete Modal----------------------*/}
                         <DeleteModal Delete={Delete} handleRemove={handleRemove} RowData={RowData} handleViewClose={handleViewClose} />
                         <Modal.Footer>
