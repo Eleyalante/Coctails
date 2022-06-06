@@ -50,6 +50,10 @@ export class IngredientController extends BaseController<IngredientRepository> {
             }
             let id = req.query.id.toString();
             const ingredient = await this._repository.getById(id);
+            if(ingredient === null){
+                result = new ApiResponse<Ingredient>(null, false, 'Ingredient not found');
+                return this.error(res, result);
+            }
             result = new ApiResponse<Ingredient>(ingredient, true);
             return this.ok(res, result);
         } catch (e) {

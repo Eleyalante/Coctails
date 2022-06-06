@@ -8,6 +8,7 @@ import ErrorDialog from "../components/ErrorDialog";
 import withParams from "../utils/ComponentWithParams";
 import {addState} from "../utils/Values";
 import CategoryService from "../services/CategoryService";
+import isNullOrEmpty from "../utils/StringUtil";
 
 
 
@@ -72,10 +73,10 @@ class AddCategory extends React.Component {
     }
 
     submit() {
-        this.setState({
-            nameError: this.state.name.length === 0
-        })
-        if (this.state.nameError) {
+        if (isNullOrEmpty(this.state.name)) {
+            this.setState({
+                nameError: isNullOrEmpty(this.state.name), unitError: isNullOrEmpty(this.state.unit ),
+            })
             return;
         }
         let service = new CategoryService();

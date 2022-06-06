@@ -117,10 +117,8 @@ export default function NavigationBar() {
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static" style={{backgroundColor:primaryColor}}>
                 <Toolbar>
-                    <Typography variant="h6">
-                        <img src='/images/Logo_2.png' height={64} alt='logo'
-                             style={{marginTop: '5px', justifyContent: 'center'}}/>
-                    </Typography>
+                    <img src='/images/Logo_2.png' height={64} alt='logo' onClick={() => {   window.location.href = '/';}}
+                         style={{marginTop: '5px', justifyContent: 'center'}}/>
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon/>

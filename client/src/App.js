@@ -7,6 +7,7 @@ import {ThemeProvider} from "@mui/material";
 import {mainTheme} from "./utils/Values";
 import Categories from "./pages/Categories";
 import AddCategory from "./pages/AddCategory";
+import AddCocktail from "./pages/AddCocktail";
 
 
 function App() {
@@ -22,6 +23,9 @@ function App() {
                     <Route path='/categories' element={<Categories/>}/>
                     <Route path='/add_category/:id' element={<AddCategory/>}/>
                     <Route path='/add_category' element={<AddCategory/>}/>
+
+                    <Route path='/add_cocktail' element={<AddCocktail/>}/>
+
                     {/* <Route path='/category' element={<Category />} />
       <Route path='/cocktail' element={<Cocktail />} />
       <Route path='/searched/search' element={<Searched />} /> */}

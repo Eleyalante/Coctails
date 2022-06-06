@@ -46,6 +46,11 @@ export class CategoryController extends BaseController<CategoryRepository> {
             }
             let id = req.query.id.toString();
             const category = await this._repository.getById(id);
+
+            if (category === null) {
+                result = new ApiResponse<Category>(null, false, 'Category not found');
+                return this.error(res, result);
+            }
             result = new ApiResponse<Category>(category, true);
             return this.ok(res, result);
         } catch (e) {

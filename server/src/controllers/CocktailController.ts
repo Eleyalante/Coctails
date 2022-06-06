@@ -44,7 +44,6 @@ export class CocktailController extends BaseController<CocktailRepository> {
             let updateResult = await this._repository.update(input);
             if(updateResult.modifiedCount == 1){
                 const cocktail = await this._repository.getById(input.id);
-            
                 result = new ApiResponse<Cocktail>(cocktail, true);
                 return this.ok(res, result);
             }else{
@@ -67,6 +66,11 @@ export class CocktailController extends BaseController<CocktailRepository> {
             }
             let id = req.query.id.toString();
             const cocktail = await this._repository.getById(id);
+            
+            if(cocktail === null){
+                result = new ApiResponse<Cocktail>(null, false, 'Cocktail not found');
+                return this.error(res, result);
+            }
             result = new ApiResponse<Cocktail>(cocktail, true);
             return this.ok(res, result);
         } catch (e) {

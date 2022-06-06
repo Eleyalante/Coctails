@@ -8,6 +8,7 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import ErrorDialog from "../components/ErrorDialog";
 import withParams from "../utils/ComponentWithParams";
 import {addState} from "../utils/Values";
+import isNullOrEmpty from "../utils/StringUtil";
 
 
 
@@ -53,6 +54,9 @@ class AddIngredient extends React.Component {
                 })
             } else {
                 this.showErrorDialog(res.error);
+                this.setState({
+                    id: '',
+                });
             }
         })
 
@@ -68,7 +72,6 @@ class AddIngredient extends React.Component {
             if (res.success) {
                 window.location.href = '/ingredients';
             } else {
-                console.log(res);
                 this.showErrorDialog(res.error);
             }
         })
@@ -76,10 +79,10 @@ class AddIngredient extends React.Component {
     }
 
     submit() {
-        this.setState({
-            nameError: this.state.name.length === 0, unitError: this.state.unit.length === 0,
-        })
-        if (this.state.unitError || this.state.nameError) {
+        if (isNullOrEmpty(this.state.name) || isNullOrEmpty(this.state.unit)) {
+            this.setState({
+                nameError: isNullOrEmpty(this.state.name), unitError: isNullOrEmpty(this.state.unit ),
+            })
             return;
         }
         let service = new IngredientService();
@@ -96,7 +99,6 @@ class AddIngredient extends React.Component {
         })
         if(this.state.id !== ''){
             service.updateIngredient(body).then((res) => {
-                console.log(res);
                 if (res.success) {
                     window.location.href = '/ingredients';
                 } else {
@@ -105,7 +107,6 @@ class AddIngredient extends React.Component {
             });
         }else{
             service.createIngredient(body).then((res) => {
-                console.log(res);
                 if (res.success) {
                     window.location.href = '/ingredients';
                 } else {
