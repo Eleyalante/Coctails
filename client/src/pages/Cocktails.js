@@ -6,13 +6,13 @@ import AddItemButton from "../components/AddItemButton";
 import NoData from "../components/NoData";
 import CocktailService from "../services/CocktailService";
 import CocktailCard from "../components/CocktailCard";
+import {errorState} from "../utils/Values";
 
 export default class Cocktails extends React.Component {
-    // cocktailUrl = `${this.url}/ingredients/`;
 
     constructor(props) {
         super(props);
-        this.state = { cocktails: [], loading: true, errorDialogOpen: false, error: "" };
+        this.state = { cocktails: [], loading: true, ...errorState};
         this.fetchCocktails = this.fetchCocktails.bind(this);
         this.showErrorDialog = this.showErrorDialog.bind(this);
     }
@@ -28,10 +28,10 @@ export default class Cocktails extends React.Component {
     fetchCocktails() {
         let service = new CocktailService();
         service.fetchCocktails().then((res) => {
-            if (res) {
+            if (res.success) {
                 this.setState({
                     loading: false,
-                    cocktails: res,
+                    cocktails: res.data,
                 });
             } else {
                 this.showErrorDialog(res.error);

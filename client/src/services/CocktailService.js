@@ -2,13 +2,11 @@ import BaseService from "./BaseService";
 import axios from "axios";
 
 export default class CocktailService extends BaseService {
-    ingredientUrl = `https://jsonplaceholder.typicode.com/posts`;
     cocktailUrl = `${this.url}/cocktails/`;
 
     async fetchCocktails() {
         try {
-            let result = await axios.get(`${this.ingredientUrl}`);
-            // console.log(result.data);
+            let result = await axios.get(`${this.cocktailUrl}/all`);
             return result.data;
         } catch (err) {
             return err.response.data;
