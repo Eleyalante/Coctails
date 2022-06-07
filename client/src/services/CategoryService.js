@@ -4,7 +4,7 @@ import axios from "axios";
 export default class CategoryService extends BaseService{
 
 
-    categoryUrl = `${this.url}/categories/`
+    categoryUrl = `${this.url}/categories/`;
 
     async fetchCategories() {
         try {

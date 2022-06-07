@@ -3,11 +3,9 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { Grid } from "@mui/material";
 import ErrorDialog from "../components/ErrorDialog";
 import AddItemButton from "../components/AddItemButton";
-import IngredientCard from "../components/IngredientCard";
 import NoData from "../components/NoData";
 import CocktailService from "../services/CocktailService";
 import CocktailCard from "../components/CocktailCard";
-import RecipeReviewCard from "../components/RecipeReviewCard";
 
 export default class Cocktails extends React.Component {
     // cocktailUrl = `${this.url}/ingredients/`;
@@ -61,7 +59,7 @@ export default class Cocktails extends React.Component {
                         ))}
                     </Grid>
                 )}
-                <AddItemButton href="/add_ingredient" />
+                <AddItemButton href="/add_cocktail" />
                 <ErrorDialog
                     isOpen={this.state.errorDialogOpen}
                     body={this.state.error}

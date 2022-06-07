@@ -11,6 +11,7 @@ import ConfirmDialog from "../components/ConfirmDialog";
 import ErrorDialog from "../components/ErrorDialog";
 import MultipleSelectChip from "../components/MultipleSelectChip";
 import isNullOrEmpty from "../utils/StringUtil";
+import CocktailService from "../services/CocktailService";
 
 class AddCocktail extends React.Component {
 
@@ -28,6 +29,7 @@ class AddCocktail extends React.Component {
             categories: [],
             selectedCategories: [],
             redirectTo: '',
+            image:'',
             id: id,
             ...addState
         }
@@ -63,18 +65,50 @@ class AddCocktail extends React.Component {
         if (!valid) {
             return;
         }
-        let ingredienstBody = [];
+        let ingredientsBody = [];
         this.state.selectedIngredients.forEach((e) => {
-           ingredienstBody.push({
+            ingredientsBody.push({
                'ingredient':e.id,
-               'amount':e.amount
+               'amount':Number(e.amount)
            })
         });
+        let categoriesBody = [];
+        this.state.selectedCategories.forEach((e) => {
+            categoriesBody.push(e.id)
+        });
+
         let reqBody = {
             'name':this.state.name,
-            'recipe':this.stte.r
+            'recipe':this.state.recipe,
+            'ingredients': ingredientsBody,
+            'categories':categoriesBody,
+            'image':this.state.image
         }
-        console.log(ingredienstBody);
+        let service = new CocktailService();
+        this.setState({
+            loading: true
+        });
+        if(this.state.id !== ''){
+            reqBody = {
+                'id':'xdd',
+                ...reqBody
+            }
+            service.updateCocktail(reqBody).then((res) => {
+                if (res.success) {
+                    window.location.href = '/cocktails';
+                } else {
+                    this.showErrorDialog(res.error);
+                }
+            });
+        }else{
+            service.createCocktail(reqBody).then((res) => {
+                if (res.success) {
+                    window.location.href = '/cocktails';
+                } else {
+                    this.showErrorDialog(res.error);
+                }
+            });
+        }
     }
 
     showErrorDialog(error) {
@@ -102,6 +136,13 @@ class AddCocktail extends React.Component {
         let categoryService = new CategoryService();
         let [ingredientRes, categoryRes] = await Promise.all([ingredientService.fetchIngredients(), categoryService.fetchCategories()]);
         if (ingredientRes.success && categoryRes.success) {
+            if(ingredientRes.data.length === 0){
+                this.setState({
+                    redirectTo:'/ingredients'
+                });
+                this.showErrorDialog('You have to add at least one ingredient before adding cocktails');
+            }
+
             for (let i = 0; i < ingredientRes.data.length; i++) {
                 ingredientRes.data[i].amount = 1;
                 ingredientRes.data[i].amountError = false;
@@ -189,7 +230,6 @@ class AddCocktail extends React.Component {
                             this.setState({
                                 selectedIngredients: e.target.value
                             });
-                            console.log(this.state.selectedIngredients);
                         }} items={this.state.ingredients} selectedItems={this.state.selectedIngredients}/>
                         {
                             this.state.selectedIngredients.map((e) => <TextField
