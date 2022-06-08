@@ -6,6 +6,7 @@ import cors from 'cors';
 import { Logger } from "./utils/Logger";
 import settingsRouter from "./routers/SettingsRouter";
 import categoryRouter from "./routers/CategoryRouter";
+import { exit } from "process";
 
 
 const PORT = process.env.PORT || 8080;

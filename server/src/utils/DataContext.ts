@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { exit } from "process";
 
 
 export class DataContext {
@@ -17,6 +18,7 @@ export class DataContext {
             console.log('SUCCESSFULLY CONNECTED DB');
         }).catch((err) => {
             console.log('Not Connected to Database ERROR! ', err);
+            exit(1);
         });
     }
 }
