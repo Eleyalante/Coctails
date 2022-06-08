@@ -91,7 +91,7 @@ class AddCocktail extends React.Component {
         });
         if (this.state.id !== '') {
             reqBody = {
-                'id': 'xdd',
+                'id': this.state.id,
                 ...reqBody
             }
             service.updateCocktail(reqBody).then((res) => {
