@@ -1,8 +1,7 @@
 cd .\server\
-- --
 npm install
-- --
-npm run build
+npm start
 - -- 
-npm run dev
-- -- 
+cd .\client\
+npm install
+npm start
