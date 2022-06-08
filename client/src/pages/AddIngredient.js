@@ -215,7 +215,7 @@ class AddIngredient extends React.Component {
                     </CardContent>
                 </Card>}
             <ConfirmDialog title={`Ingredient: ${this.state.name}`}
-                           body='Are you sure you want to delete this ingredient?' confirm={() => this.delete()}
+                           body='Are you sure you want to delete this ingredient? You CAN NOT view this ingredient anymore if you delete' confirm={() => this.delete()}
                            handleClose={() => {
                                this.setState({
                                    confirmDialogOpen: false

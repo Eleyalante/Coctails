@@ -41,12 +41,11 @@ export default class MultipleSelectChip extends  React.Component{
                 >
                     {this.items.map((item) => (
                         <MenuItem
-
                             key={item.id}
                             value={item}
-                            // style={getStyles(name, personName, theme)}
+
                         >
-                            <Checkbox checked={this.props.selectedItems.indexOf(item) > -1} />
+                            <Checkbox checked={this.props.selectedItems.some(e => e.id === item.id)} />
                             {item.name}
                         </MenuItem>
                     ))}

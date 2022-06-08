@@ -152,7 +152,7 @@ class AddCategory extends React.Component {
                     </CardContent>
                 </Card>}
             <ConfirmDialog title={`Category: ${this.state.name}`}
-                           body='Are you sure you want to delete this category?' confirm={() => this.delete()}
+                           body='Are you sure you want to delete this category? You CAN NOT view this ingredient anymore if you delete' confirm={() => this.delete()}
                            handleClose={() => {
                                this.setState({
                                    confirmDialogOpen: false

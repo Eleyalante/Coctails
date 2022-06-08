@@ -29,7 +29,7 @@ class AddCocktail extends React.Component {
             categories: [],
             selectedCategories: [],
             redirectTo: '',
-            image:'',
+            image: '',
             id: id,
             ...addState
         }
@@ -40,6 +40,7 @@ class AddCocktail extends React.Component {
         this.handleFileRead = this.handleFileRead.bind(this);
         this.validateForm = this.validateForm.bind(this);
         this.submit = this.submit.bind(this);
+        this.delete = this.delete.bind(this);
     }
 
     validateForm() {
@@ -68,9 +69,9 @@ class AddCocktail extends React.Component {
         let ingredientsBody = [];
         this.state.selectedIngredients.forEach((e) => {
             ingredientsBody.push({
-               'ingredient':e.id,
-               'amount':Number(e.amount)
-           })
+                'ingredient': e.id,
+                'amount': Number(e.amount)
+            })
         });
         let categoriesBody = [];
         this.state.selectedCategories.forEach((e) => {
@@ -78,19 +79,19 @@ class AddCocktail extends React.Component {
         });
 
         let reqBody = {
-            'name':this.state.name,
-            'recipe':this.state.recipe,
+            'name': this.state.name,
+            'recipe': this.state.recipe,
             'ingredients': ingredientsBody,
-            'categories':categoriesBody,
-            'image':this.state.image
+            'categories': categoriesBody,
+            'image': this.state.image
         }
         let service = new CocktailService();
         this.setState({
             loading: true
         });
-        if(this.state.id !== ''){
+        if (this.state.id !== '') {
             reqBody = {
-                'id':'xdd',
+                'id': 'xdd',
                 ...reqBody
             }
             service.updateCocktail(reqBody).then((res) => {
@@ -100,7 +101,7 @@ class AddCocktail extends React.Component {
                     this.showErrorDialog(res.error);
                 }
             });
-        }else{
+        } else {
             service.createCocktail(reqBody).then((res) => {
                 if (res.success) {
                     window.location.href = '/cocktails';
@@ -109,6 +110,23 @@ class AddCocktail extends React.Component {
                 }
             });
         }
+    }
+
+    delete(){
+        let service = new CocktailService();
+        this.setState({
+            loading: true, confirmDialogOpen: false
+        })
+        service.deleteCocktail(this.state.id).then((res) => {
+            console.log(res);
+            if (res.success) {
+                window.location.href = '/cocktails';
+            } else {
+                console.log(res);
+                this.showErrorDialog(res.error);
+            }
+        })
+
     }
 
     showErrorDialog(error) {
@@ -134,11 +152,35 @@ class AddCocktail extends React.Component {
     async fetchInitData() {
         let ingredientService = new IngredientService();
         let categoryService = new CategoryService();
+        let cocktailService = new CocktailService();
+        if (this.state.id !== '') {
+            let cocktailRes = await cocktailService.fetchCocktail(this.state.id);
+            if (cocktailRes.success) {
+                let selectedIngredients = [];
+                cocktailRes.data.ingredients.forEach((e)=> {
+                    let ingredient = e.ingredient;
+                    ingredient.amount = e.amount;
+                    selectedIngredients.push(ingredient);
+                });
+                this.setState({
+                    name: cocktailRes.data.name,
+                    selectedCategories: cocktailRes.data.categories,
+                    selectedIngredients:selectedIngredients,
+                    recipe: cocktailRes.data.recipe,
+
+                })
+            } else {
+                this.setState({
+                    error: cocktailRes.error,
+                    errorDialogOpen: true,
+                })
+            }
+        }
         let [ingredientRes, categoryRes] = await Promise.all([ingredientService.fetchIngredients(), categoryService.fetchCategories()]);
         if (ingredientRes.success && categoryRes.success) {
-            if(ingredientRes.data.length === 0){
+            if (ingredientRes.data.length === 0) {
                 this.setState({
-                    redirectTo:'/ingredients'
+                    redirectTo: '/ingredients'
                 });
                 this.showErrorDialog('You have to add at least one ingredient before adding cocktails');
             }
@@ -220,15 +262,33 @@ class AddCocktail extends React.Component {
                             onChange={this.handleRecipeChange}
                             fullWidth
                         />
-                        <MultipleSelectChip title='Categories' onChange={(e) => {
-                            this.setState({
-                                selectedCategories: e.target.value
-                            })
-                        }} items={this.state.categories} selectedItems={this.state.selectedCategories}/>
-                        <MultipleSelectChip title='Ingredients' onChange={(e) => {
+                        <MultipleSelectChip title='Categories' onChange={(e,c) => {
+                            let category = c.props.value;
+                            let categories = this.state.selectedCategories;
+                            if(!categories.some(c => c.id === category.id)){
+                                categories.push(category);
+                            }else{
+                                let index = categories.findIndex((c) => c.id === category.id);
 
+                                categories.splice(index,1);
+                            }
+                            console.log(categories);
                             this.setState({
-                                selectedIngredients: e.target.value
+                                selectedCategories: categories
+                            });
+                        }} items={this.state.categories} selectedItems={this.state.selectedCategories}/>
+                        <MultipleSelectChip title='Ingredients' onChange={(e,c) => {
+                            let ingredient =c.props.value;
+                            let ingredients = this.state.selectedIngredients;
+                            if(!ingredients.some(c => c.id === ingredient.id)){
+                                ingredients.push(ingredient);
+                            }else{
+                                let index = ingredients.findIndex((c) => c.id === ingredient.id);
+
+                                ingredients.splice(index,1);
+                            }
+                            this.setState({
+                                selectedIngredients: ingredients
                             });
                         }} items={this.state.ingredients} selectedItems={this.state.selectedIngredients}/>
                         {
@@ -288,8 +348,8 @@ class AddCocktail extends React.Component {
                                     startIcon={<FontAwesomeIcon icon={faTrash}/>}> Delete </Button>}
                     </CardContent>
                 </Card>}
-            <ConfirmDialog title={`Ingredient: ${this.state.name}`}
-                           body='Are you sure you want to delete this ingredient?' confirm={() => this.delete()}
+            <ConfirmDialog title={`Cocktail: ${this.state.name}`}
+                           body='Are you sure you want to delete this cocktail? You CAN NOT view this ingredient anymore if you delete' confirm={() => this.delete()}
                            handleClose={() => {
                                this.setState({
                                    confirmDialogOpen: false

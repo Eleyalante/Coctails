@@ -24,7 +24,7 @@ export default class ConfirmDialog extends React.Component {
             >
                 <DialogTitle id="alert-dialog-title">{`Delete ${this.props.title}`}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">{`${this.props.body} You CAN NOT view this ingredient anymore if you delete.`}</DialogContentText>
+                    <DialogContentText id="alert-dialog-description">{`${this.props.body}`}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.confirm}>YES</Button>

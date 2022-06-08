@@ -7,12 +7,13 @@ import NoData from "../components/NoData";
 import CocktailService from "../services/CocktailService";
 import CocktailCard from "../components/CocktailCard";
 import {errorState} from "../utils/Values";
+import CocktailInfoDialog from "../components/CocktailInfoDialog";
 
 export default class Cocktails extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { cocktails: [], loading: true, ...errorState};
+        this.state = { cocktails: [], loading: true, selectedCocktail: null,detailIsOpen:false, ...errorState};
         this.fetchCocktails = this.fetchCocktails.bind(this);
         this.showErrorDialog = this.showErrorDialog.bind(this);
     }
@@ -54,7 +55,14 @@ export default class Cocktails extends React.Component {
                     <Grid container justifyContent="center" spacing={5}>
                         {this.state.cocktails.map((value) => (
                             <Grid key={value.id} item lg={4} md={6} xs={12}>
-                                <CocktailCard cocktail={value} />
+                                <CocktailCard cocktail={value} onDetailClick={()=>{
+                                    console.log(value);
+                                    this.setState({
+                                        selectedCocktail:value,
+                                        detailIsOpen:true
+                                    });
+                                    console.log(this.state);
+                                }} />
                             </Grid>
                         ))}
                     </Grid>
@@ -66,6 +74,15 @@ export default class Cocktails extends React.Component {
                     handleClose={() => {
                         this.setState({
                             errorDialogOpen: false,
+                        });
+                    }}
+                />
+                <CocktailInfoDialog
+                    isOpen={this.state.detailIsOpen}
+                    cocktail={this.state.selectedCocktail}
+                    handleClose={() => {
+                        this.setState({
+                            detailIsOpen: false,
                         });
                     }}
                 />

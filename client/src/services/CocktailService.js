@@ -35,13 +35,23 @@ export default class CocktailService extends BaseService {
         }
     }
 
-    // async fetchIngredient(id) {
-    //     try {
-    //         let fetchUrl = `${this.ingredientUrl}getById?id=${id}`;
-    //         let result = await axios.get(fetchUrl);
-    //         return result.data;
-    //     } catch (err) {
-    //         return err.response.data;
-    //     }
-    // }
+    async fetchCocktail(id) {
+        try {
+            let fetchUrl = `${this.cocktailUrl}getById?id=${id}`;
+            let result = await axios.get(fetchUrl);
+            return result.data;
+        } catch (err) {
+            return err.response.data;
+        }
+    }
+
+    async deleteCocktail(id) {
+        try {
+            let fetchUrl = `${this.cocktailUrl}delete?id=${id}`;
+            let result = await axios.delete(fetchUrl);
+            return result.data;
+        } catch (err) {
+            return err.response.data;
+        }
+    }
 }
