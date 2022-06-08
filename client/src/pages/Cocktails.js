@@ -49,7 +49,7 @@ export default class Cocktails extends React.Component {
             LoadingSpinner()
         ) : (
             <div style={{ margin: "20px" }}>
-                {this.state.length === 0 ? (
+                {this.state.cocktails.length === 0 ? (
                     <NoData />
                 ) : (
                     <Grid container justifyContent="center" spacing={5}>
