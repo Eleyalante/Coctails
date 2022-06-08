@@ -24,7 +24,7 @@ export default class CategoryCard extends React.Component{
                         Edit
                     </Button>
 
-                    <Button variant="contained" fullWidth
+                    <Button variant="contained" fullWidth  href={`/cocktails?category=${this.category.id}`}
                             startIcon={<FontAwesomeIcon icon={faMartiniGlassCitrus}/>}>
                         View cocktails with {this.category.name}
                     </Button>

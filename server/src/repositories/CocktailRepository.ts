@@ -12,9 +12,14 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
 
     async getByIngredient(id: string): Promise<Cocktail[]> {
-        let result = this._model.find({ "ingredients.ingredient": id }).populate('ingredients.ingredient').populate('categories');
-        console.log(result);
+        let result = this._model.find({ingredients: {$elemMatch:{"ingredient":id}}}).populate('ingredients.ingredient').populate('categories');
         return result;
+    }
+    
+    async getByCategory(id: string) : Promise<Cocktail[]>{
+        let result = this._model.find({categories:{$in:[id]}}).populate('ingredients.ingredient').populate('categories');
+        return result;
+
     }
 
     async getByName(nameValue: string): Promise<Cocktail> {

@@ -27,6 +27,10 @@ export default class CocktailInfoDialog extends  React.Component{
             >
                 <DialogTitle id="scroll-dialog-title">{this.props.cocktail?.name}</DialogTitle>
                 <DialogContent dividers={false}>
+                    <Divider style={{marginTop: '10px', marginBottom: '10px'}}/>
+                    <Typography style={{marginBottom: '10px'}}>
+                        Recipe:
+                    </Typography>
                     <Typography style={{marginBottom: '10px'}}>
                         {this.props.cocktail?.recipe}
                     </Typography>
@@ -38,7 +42,7 @@ export default class CocktailInfoDialog extends  React.Component{
                         {this.props.cocktail?.ingredients.map((e) => {
 
                             if (e.ingredient !== null) {
-                                return <Grid key={e.ingredient.id} item> <Chip label={e.ingredient.name}
+                                return <Grid key={e.ingredient.id} item> <Chip label={`${e.ingredient.name} [${e.amount} ${e.ingredient.unit}]`}
                                                                                variant="outlined"/> </Grid>;
                             }
                         })}

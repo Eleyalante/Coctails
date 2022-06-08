@@ -12,6 +12,7 @@ export default class Ingredients extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {ingredients: [], loading: true, errorDialogOpen: false, error: ''};
         this.fetchIngredients = this.fetchIngredients.bind(this);
         this.showErrorDialog = this.showErrorDialog.bind(this);

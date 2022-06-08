@@ -45,7 +45,7 @@ export default class IngredientCard extends React.Component {
                         Edit
                     </Button>
 
-                    <Button variant="contained" fullWidth
+                    <Button variant="contained" fullWidth href={`/cocktails?ingredient=${this.ingredient.id}`}
                             startIcon={<FontAwesomeIcon icon={faMartiniGlassCitrus}/>}>
                         View cocktails with {this.ingredient.name}
                     </Button>
