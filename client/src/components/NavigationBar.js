@@ -129,6 +129,9 @@ export default function NavigationBar() {
                         window.location.href = '/settings';
                     }}
                         style={{marginTop: '0', justifyContent: 'center'}}/>
+                    <Typography variant='h4' style={{marginLeft: '10px'}}>
+                        {settings.appName}
+                    </Typography>
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon/>
