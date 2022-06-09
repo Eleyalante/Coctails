@@ -31,7 +31,7 @@ export default class CocktailInfoDialog extends React.Component {
                 fullWidth
                 onClose={() => {
                     this.setState({
-                        serving:1,
+                        serving: 1,
                         servingError: false
                     })
                     this.props.handleClose();
@@ -49,7 +49,7 @@ export default class CocktailInfoDialog extends React.Component {
                     </Typography>
                     <Divider style={{marginTop: '10px', marginBottom: '10px'}}/>
                     <TextField
-                        style={{marginBottom: '10px',marginTop: '10px'}}
+                        style={{marginBottom: '10px', marginTop: '10px'}}
                         id="outlined-required"
                         label='Number of servings'
                         value={this.state.serving}
@@ -105,7 +105,7 @@ export default class CocktailInfoDialog extends React.Component {
                     <Button href={`/add_cocktail/${this.props.cocktail?.id}`}>Edit</Button>
                     <Button onClick={() => {
                         this.setState({
-                            serving:1,
+                            serving: 1,
                             servingError: false
                         });
                         this.props.handleClose();

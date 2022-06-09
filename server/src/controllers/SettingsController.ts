@@ -43,8 +43,22 @@ export class SettingsController extends BaseController<SettingsRepository> {
             return this.error(res, result);
         }
     }
-    delete(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
-        throw new Error("Method not implemented.");
+
+    async delete(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
+        let result: ApiResponse<boolean>;
+        try {
+            if (this.isNullOrEmpty(req.query.id)) {
+                result = new ApiResponse<boolean>(null, false, 'Wrong ID format');
+                return this.error(res, result);
+            }
+            let id = req.query.id.toString();
+            let deleteResult = await this._repository.delete(id);
+            result = new ApiResponse<boolean>(deleteResult.acknowledged, true);
+            return this.ok(res, result);
+        } catch (e) {
+            result = new ApiResponse<boolean>(null, false, e.toString());
+            return this.error(res, result);
+        }
     }
 
     async update(req: express.Request, res: express.Response) {

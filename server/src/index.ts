@@ -11,7 +11,7 @@ import { SettingsRepository } from "./repositories/SettingsRepository";
 
 
 const PORT = process.env.PORT || 8080;
-const databaseIP = 'mongodb://localhost:27017/';
+const databaseIP =  'mongodb://localhost:27017/';
 const databaseName = 'cocktails';
 
 const app = express();
