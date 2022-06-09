@@ -262,7 +262,7 @@ class AddSettings extends React.Component {
                                    }}/>
 
                 <ConfirmDialog title={`Settings: ${this.state.name}`}
-                               body='Are you sure you want to delete this settings? You CAN NOT view this settings anymore if you delete (ALL COCKTAILS, INGREDIENTS, CATEGORIES will be deleted)'
+                               body='Are you sure you want to delete this settings? You CAN NOT view this settings anymore if you delete'
                                confirm={() => this.delete()}
                                handleClose={() => {
                                    this.setState({
