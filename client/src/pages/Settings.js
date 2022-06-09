@@ -77,7 +77,7 @@ export default class Settings extends React.Component {
                                         id="outlined-required"
                                         label="App Name"
                                         defaultValue={value.appName}
-                                        readOnly
+                                        inputProps={{ readOnly: true }}
                                         fullWidth
                                     />
                                     <TextField
@@ -85,7 +85,7 @@ export default class Settings extends React.Component {
                                         label="Color"
                                         style={{marginTop: '10px'}}
                                         defaultValue={value.color}
-                                        readOnly
+                                        inputProps={{ readOnly: true }}
                                         onClick={() => {
                                             this.setState({
                                                 colorPickerOpen: true
