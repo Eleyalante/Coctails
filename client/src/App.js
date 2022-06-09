@@ -11,11 +11,11 @@ import AddCategory from "./pages/AddCategory";
 import AddCocktail from "./pages/AddCocktail";
 import AddSettings from "./pages/AddSettings";
 import NoData from "./components/NoData";
+import Settings from "./pages/Settings";
 
 
 function App() {
     const settingsValue = localStorage.getItem('settings');
-    console.log(settingsValue);
     let theme = mainTheme;
     if (settingsValue === null) {
         return <AddSettings/>;
@@ -30,7 +30,7 @@ function App() {
                 <Routes>
 
                     <Route path='/add_settings/:id' element={<AddSettings/>}/>
-                    <Route path='/settings' element={<div/>}/>
+                    <Route path='/settings' element={<Settings/>}/>
 
                     <Route path='/ingredients' element={<Ingredients/>}/>
                     <Route path='/add_ingredient/:id' element={<AddIngredient/>}/>

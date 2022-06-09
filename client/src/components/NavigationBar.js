@@ -11,7 +11,9 @@ import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import MoreIcon from '@mui/icons-material/MoreVert';
-import {faAppleAlt, faMartiniGlassCitrus, faAlignJustify,faBookSkull} from "@fortawesome/free-solid-svg-icons";
+import {faAppleAlt, faMartiniGlassCitrus, faAlignJustify, faBookSkull} from "@fortawesome/free-solid-svg-icons";
+import CardMedia from "@mui/material/CardMedia";
+import {Image} from "react-bootstrap";
 
 const Search = styled('div')(({theme}) => ({
     position: 'relative',
@@ -59,6 +61,9 @@ export default function NavigationBar() {
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+
+    const settings = JSON.parse(localStorage.getItem('settings'));
+
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
@@ -84,23 +89,23 @@ export default function NavigationBar() {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-                <Button
-                    startIcon={<FontAwesomeIcon icon={faMartiniGlassCitrus}/>}
-                    size="large"
-                    fullWidth
-                    href="/cocktails"
-                    color="inherit">
-                    Cocktails
-                </Button>
-                <Button
-                    startIcon={<FontAwesomeIcon icon={faAppleAlt}/>}
-                    size="large"
-                    fullWidth
-                    href="/ingredients"
-                    color="inherit"
-                >
-                    Ingredients
-                </Button>
+            <Button
+                startIcon={<FontAwesomeIcon icon={faMartiniGlassCitrus}/>}
+                size="large"
+                fullWidth
+                href="/cocktails"
+                color="inherit">
+                Cocktails
+            </Button>
+            <Button
+                startIcon={<FontAwesomeIcon icon={faAppleAlt}/>}
+                size="large"
+                fullWidth
+                href="/ingredients"
+                color="inherit"
+            >
+                Ingredients
+            </Button>
             <Button
                 startIcon={<FontAwesomeIcon icon={faAlignJustify}/>}
                 size="large"
@@ -113,14 +118,17 @@ export default function NavigationBar() {
         </Menu>
     );
 
+
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static" >
+            <AppBar position="static">
                 <Toolbar>
-                    <Typography variant="h6">
-                        <img src='/images/Logo_2.png' height={64} alt='logo'
-                             style={{marginTop: '5px', justifyContent: 'center'}}/>
-                    </Typography>
+                    <img
+                        src={(settings.logo === undefined || settings.logo?.length < 1) ? '/images/Logo_2.png' : settings.logo}
+                        height={64} alt='logo' onClick={() => {
+                        window.location.href = '/settings';
+                    }}
+                        style={{marginTop: '0', justifyContent: 'center'}}/>
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon/>

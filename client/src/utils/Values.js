@@ -20,7 +20,9 @@ export const mainTheme = createTheme({
             main: '#64748B',
             contrastText: pickTextColorBasedOnBgColorSimple(defaultColor),
         },
+
     },
+
 });
 
 

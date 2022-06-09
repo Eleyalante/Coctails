@@ -10,7 +10,7 @@ export class SettingsRepository extends BaseRepository<Settings> {
     }
 
     async getById(id: string): Promise<Settings> {
-        return this._model.findOne({ id: id });
+        return this._model.findOne({ '_id': id });
     }
 
     async all(): Promise<Settings[]> {
@@ -18,7 +18,7 @@ export class SettingsRepository extends BaseRepository<Settings> {
     }
 
     async update(item: Settings): Promise<mongodb.UpdateResult> {
-        let exists = await this._model.exists({ name: item.appName, '_id': { $ne: item.id } });
+        let exists = await this._model.exists({ appName: item.appName, '_id': { $ne: item.id } });
         if (exists !== null) {
             throw new Error("Settings with this app name already exists");
         } else {

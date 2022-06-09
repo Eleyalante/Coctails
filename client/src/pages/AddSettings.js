@@ -52,7 +52,7 @@ class AddSettings extends React.Component {
         service.fetchSettings(this.state.id).then((res) => {
             if (res.success) {
                 this.setState({
-                    loading: false, name: res.data.appName, color: res.data.color, image: res.data.image
+                    loading: false, name: res.data.appName, color: res.data.color, image: res.data.logo
                 })
             } else {
                 this.showErrorDialog(res.error);
@@ -88,7 +88,7 @@ class AddSettings extends React.Component {
         }
         let service = new SettingsService();
         let body = {
-            'appName': this.state.name, 'color': this.state.color, 'image': this.state.image
+            'appName': this.state.name, 'color': this.state.color, 'logo': this.state.image
         };
         if (this.state.id !== '') {
             body = {
@@ -110,7 +110,7 @@ class AddSettings extends React.Component {
             service.createSettings(body).then((res) => {
                 if (res.success) {
                     localStorage.setItem('settings', JSON.stringify(res.data));
-                    window.location.href = '/settings';
+                    window.location.href = '/';
                 } else {
                     this.showErrorDialog(res.error);
                 }
@@ -153,6 +153,12 @@ class AddSettings extends React.Component {
         })
     }
 
+    componentDidMount() {
+        if (this.state.id !== '') {
+            this.fetchSettings();
+        }
+    }
+
     render() {
         return <ThemeProvider theme={this.state.theme}>
             <div
@@ -161,12 +167,12 @@ class AddSettings extends React.Component {
                     justifyItems: 'center',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh',
+                    height: '80vh',
                     width: '100%'
                 }}>
                 {this.state.loading ? <LoadingSpinner/> :
                     <Card elevation={2} justify="center" style={{maxWidth: '550px', margin: '10px'}}>
-                        {this.state.image?.length < 1 ? <CardMedia
+                        {(this.state.image === undefined || this.state.image?.length < 1) ? <CardMedia
                             component="img"
                             height="140"
                             width='100'
@@ -189,12 +195,11 @@ class AddSettings extends React.Component {
                                 fullWidth
                             />
                             <TextField
-                                error={this.state.nameError}
                                 id="outlined-required"
                                 label="Color"
                                 style={{marginTop: '10px'}}
                                 value={this.state.color}
-                                disabled
+                                readOnly
                                 onClick={() => {
                                     this.setState({
                                         colorPickerOpen: true
