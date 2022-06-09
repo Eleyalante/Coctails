@@ -33,11 +33,9 @@ class Cocktails extends React.Component {
     async fetchCocktails() {
         let service = new CocktailService();
         let response;
-        console.log(this.state);
         if(this.state.category !== undefined){
             response = await  service.fetchCocktailsWithCategory(this.state.category);
         }else if(this.state.ingredient !== undefined){
-            console.log(this.state.ingredient);
             response = await  service.fetchCocktailsWithIngredient(this.state.ingredient);
         }else{
             response = await  service.fetchCocktails();
