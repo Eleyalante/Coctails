@@ -12,12 +12,12 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
 
     async getByIngredient(id: string): Promise<Cocktail[]> {
-        let result = this._model.find({ingredients: {$elemMatch:{"ingredient":id}}}).populate('ingredients.ingredient').populate('categories');
+        let result = this._model.find({ ingredients: { $elemMatch: { "ingredient": id } } }).populate('ingredients.ingredient').populate('categories');
         return result;
     }
-    
-    async getByCategory(id: string) : Promise<Cocktail[]>{
-        let result = this._model.find({categories:{$in:[id]}}).populate('ingredients.ingredient').populate('categories');
+
+    async getByCategory(id: string): Promise<Cocktail[]> {
+        let result = this._model.find({ categories: { $in: [id] } }).populate('ingredients.ingredient').populate('categories');
         return result;
 
     }
@@ -34,24 +34,36 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
 
     async update(item: Cocktail): Promise<mongodb.UpdateResult> {
         let exists = await this._model.exists({ name: item.name, '_id': { $ne: item.id } });
-        if (exists != null) {
+        if (exists !== null) {
             throw new Error("Cocktail with this name already exists");
         } else {
-            return this._model.updateOne(
-                { '_id': item.id }, {
-                name: item.name,
-                image: item.image,
-                recipe: item.recipe,
-                ingredients: item.ingredients,
-                categories: item.categories
+            if (item.image.length < 1) {
+                return this._model.updateOne(
+                    { '_id': item.id }, {
+                    name: item.name,
+                    recipe: item.recipe,
+                    ingredients: item.ingredients,
+                    categories: item.categories
+                }
+                );
+            } else {
+                return this._model.updateOne(
+                    { '_id': item.id }, {
+                    name: item.name,
+                    image: item.image,
+                    recipe: item.recipe,
+                    ingredients: item.ingredients,
+                    categories: item.categories
+                }
+                );
             }
-            );
+
         }
 
     }
 
-    async removeCategoryFromCocktail(id: string) : Promise<mongodb.UpdateResult>{
-        return this._model.updateMany( { categories: {$in:id}}, {
+    async removeCategoryFromCocktail(id: string): Promise<mongodb.UpdateResult> {
+        return this._model.updateMany({ categories: { $in: id } }, {
             $pull: {
                 categories: id
             }

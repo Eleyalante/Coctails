@@ -7,17 +7,27 @@ import { Logger } from "./utils/Logger";
 import settingsRouter from "./routers/SettingsRouter";
 import categoryRouter from "./routers/CategoryRouter";
 import { exit } from "process";
+import { SettingsRepository } from "./repositories/SettingsRepository";
 
 
 const PORT = process.env.PORT || 8080;
+const databaseIP = 'mongodb://localhost:27017/';
+const databaseName = 'cocktails';
+
 const app = express();
 
 app.use(json({limit:'15mb'}))
 app.use(urlencoded({extended: true}));
 app.use(cors());
-app.use(new Logger().LogRequest);
 
-DataContext.connect().then(
+const logger = new Logger();
+app.use(logger.LogRequest);
+
+
+
+const dataContext = new DataContext(databaseIP,databaseName);
+
+dataContext.connect().then(
     () => {
     
         app.use('/api/ingredients', ingredientRouter);

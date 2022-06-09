@@ -1,5 +1,4 @@
 import  React from 'react';
-import {primaryColor} from "../utils/Values";
 
 
 export default class NoData extends  React.Component{
@@ -9,7 +8,6 @@ export default class NoData extends  React.Component{
         return <div    style={{
             position: 'absolute',
             left: '50%',
-            color: primaryColor,
             textAlign:'center',
             fontWeight:'bold',
             fontSize:'20px',

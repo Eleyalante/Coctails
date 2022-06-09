@@ -44,6 +44,10 @@ export abstract class BaseController<BaseRepository> {
         return value === undefined || value === null || value.length < 1;
     }
 
+    extractSettingsId(req: express.Request): string{
+        return req.headers['settings-id'] as string;
+    }
+
 
     validateReqBody(schema: Object, body: any): void{
         const ajv = new Ajv();

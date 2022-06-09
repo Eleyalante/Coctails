@@ -4,9 +4,16 @@ import { exit } from "process";
 
 export class DataContext {
 
-    private static _databaseUrl: string = "mongodb://localhost:27017/cocktails";
+    private databaseName:string;
+    private databaseIP: string;
 
-    static async connect() : Promise<void> {
+    
+    constructor(ip: string, databaseName: string){
+        this.databaseIP = ip;
+        this.databaseName = databaseName;
+    }
+
+    async connect() : Promise<void> {
         console.log("CONNECTING TO DB");
         mongoose.set('toJSON', {
             virtuals: true,
@@ -14,7 +21,7 @@ export class DataContext {
                 delete converted._id;
             }
         });
-        await mongoose.connect(DataContext._databaseUrl).then(() => {
+        await mongoose.connect(`${this.databaseIP}${this.databaseName}`).then(() => {
             console.log('SUCCESSFULLY CONNECTED DB');
         }).catch((err) => {
             console.log('Not Connected to Database ERROR! ', err);

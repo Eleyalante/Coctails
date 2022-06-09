@@ -1,10 +1,12 @@
-import {SettingsRepository} from "../repositories/SettingsRepository";
-import {ApiResponse} from "../models/ApiResponse";
+import { SettingsRepository } from "../repositories/SettingsRepository";
+import { ApiResponse } from "../models/ApiResponse";
 import express from "express";
-import {Settings} from "../models/Settings";
-import {BaseController} from "./BaseController";
+import { Settings } from "../models/Settings";
+import { BaseController } from "./BaseController";
 import { ParamsDictionary } from "express-serve-static-core";
 import { ParsedQs } from "qs";
+import Ajv from "ajv";
+import { SETTINGS_CREATE_SCHEMA, SETTINGS_UPDATE_SCHEMA } from "../schemas/SettingsSchema";
 
 export class SettingsController extends BaseController<SettingsRepository> {
 
@@ -30,17 +32,60 @@ export class SettingsController extends BaseController<SettingsRepository> {
         }
     }
 
-    all(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
-        throw new Error("Method not implemented.");
+    async all(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
+        let result: ApiResponse<Settings[]>;
+        try {
+            const cocktails = await this._repository.all();
+            result = new ApiResponse<Settings[]>(cocktails, true);
+            return this.ok(res, result);
+        } catch (e) {
+            result = new ApiResponse<Settings[]>(null, false, e.toString());
+            return this.error(res, result);
+        }
     }
     delete(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
         throw new Error("Method not implemented.");
     }
-    update(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
-        throw new Error("Method not implemented.");
+
+    async update(req: express.Request, res: express.Response) {
+        let result: ApiResponse<Settings>;
+        try {
+            this.validateReqBody(SETTINGS_UPDATE_SCHEMA, req.body);
+            const input: Settings = req.body;
+
+            let updateResult = await this._repository.update(input);
+            if (updateResult.modifiedCount == 1) {
+                const cocktail = await this._repository.getById(input.id);
+                result = new ApiResponse<Settings>(cocktail, true);
+                return this.ok(res, result);
+            } else {
+                console.log(updateResult);
+                throw new Error('Update failed')
+            }
+        } catch (e) {
+            result = new ApiResponse<Settings>(null, false, e.toString());
+            return this.error(res, result);
+        }
     }
-    create(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
-        throw new Error("Method not implemented.");
+
+    async create(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
+        let result: ApiResponse<Settings>;
+        try {
+            const ajv = new Ajv();
+            const valid = ajv.validate(SETTINGS_CREATE_SCHEMA, req.body);
+            if (!valid) {
+                console.log(ajv.errors);
+                return this.error(res, new ApiResponse<Settings>(null, false, ajv.errorsText()));
+            }
+            const input: Settings = req.body;
+            const settings = await this._repository.create(input);
+            result = new ApiResponse<Settings>(settings, true);
+            return this.ok(res, result);
+
+        } catch (e) {
+            result = new ApiResponse<Settings>(null, false, e.toString());
+            return this.error(res, result);
+        }
     }
 
 }

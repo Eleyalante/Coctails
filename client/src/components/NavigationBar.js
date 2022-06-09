@@ -11,7 +11,6 @@ import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import MoreIcon from '@mui/icons-material/MoreVert';
-import {primaryColor} from '../utils/Values';
 import {faAppleAlt, faMartiniGlassCitrus, faAlignJustify,faBookSkull} from "@fortawesome/free-solid-svg-icons";
 
 const Search = styled('div')(({theme}) => ({
@@ -116,7 +115,7 @@ export default function NavigationBar() {
 
     return (
         <Box sx={{flexGrow: 1}}>
-            <AppBar position="static" style={{backgroundColor:primaryColor}}>
+            <AppBar position="static" >
                 <Toolbar>
                     <Typography variant="h6">
                         <img src='/images/Logo_2.png' height={64} alt='logo'
