@@ -132,15 +132,6 @@ export default function NavigationBar() {
                     <Typography variant='h4' style={{marginLeft: '10px'}}>
                         {settings.appName}
                     </Typography>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon/>
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{'aria-label': 'search'}}
-                        />
-                    </Search>
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {xs: 'none', md: 'flex'}}}>
                         <Button
