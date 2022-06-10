@@ -5,9 +5,9 @@ export default class IngredientService extends BaseService {
 
     ingredientUrl = `${this.url}/ingredients/`
 
-    async fetchIngredients() {
+    async fetchIngredients(pageNumber = 0, pageSize = 100)  {
         try {
-            let result = await axios.get(`${this.ingredientUrl}all`);
+            let result = await axios.get(`${this.ingredientUrl}list?pageNumber=${pageNumber}&pageSize=${pageSize}`);
             return result.data;
         } catch (err) {
             return err.response.data;

@@ -44,24 +44,28 @@ export abstract class BaseController<BaseRepository> {
         return value === undefined || value === null || value.length < 1;
     }
 
-    extractSettingsId(req: express.Request): string{
+    isNull(value: any): boolean {
+        return value === undefined || value === null;
+    }
+
+    extractSettingsId(req: express.Request): string {
         return req.headers['settings-id'] as string;
     }
 
 
-    validateReqBody(schema: Object, body: any): void{
+    validateReqBody(schema: Object, body: any): void {
         const ajv = new Ajv();
         const valid = ajv.validate(schema, body);
         if (!valid) {
             console.log(ajv.errors);
-           throw new Error(ajv.errorsText());
+            throw new Error(ajv.errorsText());
         }
     }
 
 
 
     abstract getById(req: express.Request, res: express.Response): any;
-    abstract all(req: express.Request, res: express.Response): any;
+    abstract list(req: express.Request, res: express.Response): any;
     abstract delete(req: express.Request, res: express.Response): any;
     abstract update(req: express.Request, res: express.Response): any;
     abstract create(req: express.Request, res: express.Response): any;

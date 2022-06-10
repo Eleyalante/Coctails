@@ -1,10 +1,10 @@
-import {IngredientRepository} from "../repositories/IngredientRepository";
-import {ApiResponse} from "../models/ApiResponse";
+import { IngredientRepository } from "../repositories/IngredientRepository";
+import { ApiResponse } from "../models/ApiResponse";
 import express from "express";
-import {Ingredient} from "../models/Ingredient";
-import {BaseController} from "./BaseController";
+import { Ingredient } from "../models/Ingredient";
+import { BaseController } from "./BaseController";
 import { INGREDIENT_CREATE_SCHEMA, INGREDIENT_UPDATE_SCHEMA } from "../schemas/IngredientSchema";
-import { CocktailRepository } from "../repositories/CocktailRepository"; 
+import { CocktailRepository } from "../repositories/CocktailRepository";
 
 export class IngredientController extends BaseController<IngredientRepository> {
 
@@ -24,13 +24,13 @@ export class IngredientController extends BaseController<IngredientRepository> {
             const cocktailRepository = new CocktailRepository();
             let coctailsWithIngredient = await cocktailRepository.getByIngredient(id);
             console.log(coctailsWithIngredient);
-            if(coctailsWithIngredient.length > 0){
+            if (coctailsWithIngredient.length > 0) {
                 result = new ApiResponse<boolean>(null, false, 'Can\'t delete because some cocktails using this ingredient');
                 return this.error(res, result);
             }
             const deleteResult = await this._repository.delete(id);
-            if(deleteResult == null){
-                result = new ApiResponse<boolean>(false, false,'Delete was not successfully');
+            if (deleteResult == null) {
+                result = new ApiResponse<boolean>(false, false, 'Delete was not successfully');
                 return this.error(res, result);
             }
             result = new ApiResponse<boolean>(deleteResult.acknowledged, true);
@@ -50,7 +50,7 @@ export class IngredientController extends BaseController<IngredientRepository> {
             }
             let id = req.query.id.toString();
             const ingredient = await this._repository.getById(id);
-            if(ingredient === null){
+            if (ingredient === null) {
                 result = new ApiResponse<Ingredient>(null, false, 'Ingredient not found');
                 return this.error(res, result);
             }
@@ -67,7 +67,7 @@ export class IngredientController extends BaseController<IngredientRepository> {
         try {
             this.validateReqBody(INGREDIENT_UPDATE_SCHEMA, req.body);
             const input: Ingredient = req.body;
-            if(this.isNullOrEmpty(input.image)){
+            if (this.isNullOrEmpty(input.image)) {
                 input.image = '';
             }
 
@@ -82,10 +82,14 @@ export class IngredientController extends BaseController<IngredientRepository> {
         }
     }
 
-    async all(req: express.Request, res: express.Response) {
+    async list(req: express.Request, res: express.Response) {
         let result: ApiResponse<Ingredient[]>;
         try {
-            const ingredients = await this._repository.all();
+            if (this.isNull(req.query.pageSize) || this.isNull(req.query.pageNumber)) {
+                result = new ApiResponse<Ingredient[]>(null, false, 'Wrong input format');
+                return this.error(res, result);
+            }
+            const ingredients = await this._repository.list(Number(req.query.pageNumber), Number(req.query.pageSize));
             result = new ApiResponse<Ingredient[]>(ingredients, true);
             return this.ok(res, result);
         } catch (e) {

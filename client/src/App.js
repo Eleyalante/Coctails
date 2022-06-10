@@ -30,6 +30,7 @@ function App() {
                 <Routes>
 
                     <Route path='/add_settings/:id' element={<AddSettings/>}/>
+                    <Route path='/add_settings' element={<AddSettings/>}/>
                     <Route path='/settings' element={<Settings/>}/>
 
                     <Route path='/ingredients' element={<Ingredients/>}/>

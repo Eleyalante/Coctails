@@ -6,8 +6,6 @@ import cors from 'cors';
 import { Logger } from "./utils/Logger";
 import settingsRouter from "./routers/SettingsRouter";
 import categoryRouter from "./routers/CategoryRouter";
-import { exit } from "process";
-import { SettingsRepository } from "./repositories/SettingsRepository";
 
 
 const PORT = process.env.PORT || 8080;
@@ -31,7 +29,7 @@ dataContext.connect().then(
     () => {
     
         app.use('/api/ingredients', ingredientRouter);
-        app.use('/api/cocktails', cocktailRouter);
+        app.use('/api/recipes', cocktailRouter);
         app.use('/api/settings', settingsRouter);
         app.use('/api/categories', categoryRouter);
         app.listen(PORT, () => {

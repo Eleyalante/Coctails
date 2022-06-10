@@ -32,10 +32,14 @@ export class SettingsController extends BaseController<SettingsRepository> {
         }
     }
 
-    async all(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
+    async list(req: express.Request<ParamsDictionary, any, any, ParsedQs, Record<string, any>>, res: express.Response<any, Record<string, any>>) {
         let result: ApiResponse<Settings[]>;
         try {
-            const cocktails = await this._repository.all();
+            if (this.isNull(req.query.pageSize) || this.isNull(req.query.pageNumber)) {
+                result = new ApiResponse<Settings[]>(null, false, 'Wrong input format');
+                return this.error(res, result);
+            }
+            const cocktails = await this._repository.list(Number(req.query.pageNumber), Number(req.query.pageSize));
             result = new ApiResponse<Settings[]>(cocktails, true);
             return this.ok(res, result);
         } catch (e) {

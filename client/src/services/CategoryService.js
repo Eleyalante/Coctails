@@ -6,9 +6,9 @@ export default class CategoryService extends BaseService{
 
     categoryUrl = `${this.url}/categories/`;
 
-    async fetchCategories() {
+    async fetchCategories(pageNumber = 0, pageSize = 100) {
         try {
-            let result = await axios.get(`${this.categoryUrl}all`);
+            let result = await axios.get(`${this.categoryUrl}list?pageNumber=${pageNumber}&pageSize=${pageSize}`);
             return result.data;
         } catch (err) {
             return err.response.data;

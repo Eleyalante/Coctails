@@ -1,5 +1,6 @@
 import * as mongoose from "mongoose";
 import * as mongosedb from "mongodb";
+import internal from "stream";
 
 export abstract class BaseRepository<T extends  mongoose.Document> {
 
@@ -19,8 +20,8 @@ export abstract class BaseRepository<T extends  mongoose.Document> {
     }
 
 
-    async all() : Promise<T[]>{
-        return this._model.find({}).exec();
+    async list(pageNumber: number, pageLimit: number) : Promise<T[]>{
+        return this._model.find({}).skip(pageNumber*pageLimit).limit(pageLimit).exec();
     }
 
     async delete(id: string): Promise<mongosedb.DeleteResult>{

@@ -2,11 +2,11 @@ import BaseService from "./BaseService";
 import axios from "axios";
 
 export default class CocktailService extends BaseService {
-    cocktailUrl = `${this.url}/cocktails/`;
+    cocktailUrl = `${this.url}/recipes/`;
 
-    async fetchCocktails() {
+    async fetchCocktails(pageNumber = 0, pageSize = 100) {
         try {
-            let result = await axios.get(`${this.cocktailUrl}/all`);
+            let result = await axios.get(`${this.cocktailUrl}/list?pageNumber=${pageNumber}&pageSize=${pageSize}`);
             return result.data;
         } catch (err) {
             return err.response.data;

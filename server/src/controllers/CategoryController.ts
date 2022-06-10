@@ -76,10 +76,14 @@ export class CategoryController extends BaseController<CategoryRepository> {
         }
     }
 
-    async all(req: express.Request, res: express.Response) {
+    async list(req: express.Request, res: express.Response) {
         let result: ApiResponse<Category[]>;
         try {
-            const categories = await this._repository.all();
+            if(this.isNull(req.query.pageSize) || this.isNull(req.query.pageNumber)){
+                result = new ApiResponse<Category[]>(null, false, 'Wrong input format');
+                return this.error(res, result);
+            }
+            const categories = await this._repository.list(Number(req.query.pageNumber),Number(req.query.pageSize));
             result = new ApiResponse<Category[]>(categories, true);
             return this.ok(res, result);
         } catch (e) {

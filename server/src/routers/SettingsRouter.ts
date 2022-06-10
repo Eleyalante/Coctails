@@ -7,7 +7,7 @@ const settingsRouter = Router();
 const controller = new SettingsController(new SettingsRepository());
 
 settingsRouter.get('/getById', (req,res) => controller.getById(req,res));
-settingsRouter.get('/all', (req,res) => controller.all(req,res));
+settingsRouter.get('/list', (req,res) => controller.list(req,res));
 
 
 settingsRouter.post('/create', (req,res) => controller.create(req,res));

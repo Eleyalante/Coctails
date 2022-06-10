@@ -6,7 +6,7 @@ import {CategoryRepository} from "../repositories/CategoryRepository";
 const categoryRouter = Router();
 const controller = new CategoryController(new CategoryRepository());
 
-categoryRouter.get('/all', (req,res) => controller.all(req,res))
+categoryRouter.get('/list', (req,res) => controller.list(req,res))
 categoryRouter.get('/getByName', (req,res) => controller.getByName(req,res))
 categoryRouter.get('/getById', (req,res) => controller.getById(req,res))
 

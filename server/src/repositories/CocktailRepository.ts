@@ -70,8 +70,8 @@ export class CocktailRepository extends BaseRepository<Cocktail> {
         });
     }
 
-    override async all(): Promise<Cocktail[]> {
-        return this._model.find({}).populate('ingredients.ingredient').populate('categories');
+    override async list(pageNumber: number, pageLimit: number): Promise<Cocktail[]> {
+        return this._model.find({}).skip(pageNumber*pageLimit).limit(pageLimit).populate('ingredients.ingredient').populate('categories');
     }
 
     override async create(item: Cocktail): Promise<Cocktail> {

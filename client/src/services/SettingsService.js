@@ -5,9 +5,9 @@ export default class SettingsService extends BaseService {
 
     settingsUrl = `${this.url}/settings/`
 
-    async fetchAllSettings() {
+    async fetchAllSettings(pageNumber = 0, pageSize = 100)  {
         try {
-            let result = await axios.get(`${this.settingsUrl}all`);
+            let result = await axios.get(`${this.settingsUrl}list?pageNumber=${pageNumber}&pageSize=${pageSize}`);
             return result.data;
         } catch (err) {
             return err.response.data;

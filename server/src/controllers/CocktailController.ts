@@ -80,10 +80,14 @@ export class CocktailController extends BaseController<CocktailRepository> {
     }
 
 
-    async all(req: express.Request, res: express.Response) {
+    async list(req: express.Request, res: express.Response) {
         let result: ApiResponse<Cocktail[]>;
         try {
-            const cocktails = await this._repository.all();
+            if(this.isNull(req.query.pageSize) || this.isNull(req.query.pageNumber)){
+                result = new ApiResponse<Cocktail[]>(null, false, 'Wrong input format');
+                return this.error(res, result);
+            }
+            const cocktails = await this._repository.list(Number(req.query.pageNumber),Number(req.query.pageSize));
             result = new ApiResponse<Cocktail[]>(cocktails, true);
             return this.ok(res, result);
         } catch (e) {
