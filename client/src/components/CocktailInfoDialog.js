@@ -78,9 +78,12 @@ export default class CocktailInfoDialog extends React.Component {
                         {this.props.cocktail?.ingredients.map((e) => {
                             let amount = this.state.serving <= 0 ? 0 : this.state.serving;
                             if (e.ingredient !== null) {
-                                return <Grid key={e.ingredient.id} item> <Chip
+                                return <Grid key={e.ingredient.id} item><Chip
                                     label={`${e.ingredient.name} [${e.amount * amount} ${e.ingredient.unit}]`}
-                                    variant="outlined"/> </Grid>;
+                                    variant="outlined" icon={<img
+                                    src={(e.ingredient.image === undefined || e.ingredient.image?.length < 1) ? '/images/Logo_2.png' : e.ingredient.image}
+                                    height={20} alt={e.ingredient.name}
+                                    style={{marginLeft: '10px', justifyContent: 'center'}}/>}/> </Grid>;
                             }
                         })}
                     </Grid>

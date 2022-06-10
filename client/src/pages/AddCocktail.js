@@ -4,7 +4,7 @@ import {addState} from "../utils/Values";
 import IngredientService from "../services/IngredientService";
 import CategoryService from "../services/CategoryService";
 import LoadingSpinner from "../components/LoadingSpinner";
-import {Box, Button, Card, CardContent, Input, TextField} from "@mui/material";
+import {Box, Button, Card, CardContent, Input, InputAdornment, TextField} from "@mui/material";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPen, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ConfirmDialog from "../components/ConfirmDialog";
@@ -12,6 +12,7 @@ import ErrorDialog from "../components/ErrorDialog";
 import MultipleSelectChip from "../components/MultipleSelectChip";
 import isNullOrEmpty from "../utils/StringUtil";
 import CocktailService from "../services/CocktailService";
+import {Circle} from "@mui/icons-material";
 
 class AddCocktail extends React.Component {
 
@@ -112,7 +113,7 @@ class AddCocktail extends React.Component {
         }
     }
 
-    delete(){
+    delete() {
         let service = new CocktailService();
         this.setState({
             loading: true, confirmDialogOpen: false
@@ -157,7 +158,7 @@ class AddCocktail extends React.Component {
             let cocktailRes = await cocktailService.fetchCocktail(this.state.id);
             if (cocktailRes.success) {
                 let selectedIngredients = [];
-                cocktailRes.data.ingredients.forEach((e)=> {
+                cocktailRes.data.ingredients.forEach((e) => {
                     let ingredient = e.ingredient;
                     ingredient.amount = e.amount;
                     selectedIngredients.push(ingredient);
@@ -165,7 +166,7 @@ class AddCocktail extends React.Component {
                 this.setState({
                     name: cocktailRes.data.name,
                     selectedCategories: cocktailRes.data.categories,
-                    selectedIngredients:selectedIngredients,
+                    selectedIngredients: selectedIngredients,
                     recipe: cocktailRes.data.recipe,
 
                 })
@@ -262,30 +263,31 @@ class AddCocktail extends React.Component {
                             onChange={this.handleRecipeChange}
                             fullWidth
                         />
-                        <MultipleSelectChip title='Categories' onChange={(e,c) => {
+
+                        <MultipleSelectChip title='Categories' onChange={(e, c) => {
                             let category = c.props.value;
                             let categories = this.state.selectedCategories;
-                            if(!categories.some(c => c.id === category.id)){
+                            if (!categories.some(c => c.id === category.id)) {
                                 categories.push(category);
-                            }else{
+                            } else {
                                 let index = categories.findIndex((c) => c.id === category.id);
 
-                                categories.splice(index,1);
+                                categories.splice(index, 1);
                             }
                             console.log(categories);
                             this.setState({
                                 selectedCategories: categories
                             });
                         }} items={this.state.categories} selectedItems={this.state.selectedCategories}/>
-                        <MultipleSelectChip title='Ingredients' onChange={(e,c) => {
-                            let ingredient =c.props.value;
+                        <MultipleSelectChip title='Ingredients' onChange={(e, c) => {
+                            let ingredient = c.props.value;
                             let ingredients = this.state.selectedIngredients;
-                            if(!ingredients.some(c => c.id === ingredient.id)){
+                            if (!ingredients.some(c => c.id === ingredient.id)) {
                                 ingredients.push(ingredient);
-                            }else{
+                            } else {
                                 let index = ingredients.findIndex((c) => c.id === ingredient.id);
 
-                                ingredients.splice(index,1);
+                                ingredients.splice(index, 1);
                             }
                             this.setState({
                                 selectedIngredients: ingredients
@@ -299,6 +301,16 @@ class AddCocktail extends React.Component {
                                 value={e.amount}
                                 key={e.id}
                                 error={e.amountError}
+                                InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start">
+                                            <img
+                                                src={(e.image === undefined || e.image?.length < 1) ? '/images/Logo_2.png' : e.image}
+                                                height={32} alt={e.name}
+                                                style={{marginTop: '0', justifyContent: 'center'}}/>
+                                        </InputAdornment>
+                                    ),
+                                }}
                                 type="number"
                                 onChange={(event) => {
                                     if (event.target.value !== undefined) {
@@ -349,7 +361,8 @@ class AddCocktail extends React.Component {
                     </CardContent>
                 </Card>}
             <ConfirmDialog title={`Cocktail: ${this.state.name}`}
-                           body='Are you sure you want to delete this cocktail? You CAN NOT view this ingredient anymore if you delete' confirm={() => this.delete()}
+                           body='Are you sure you want to delete this cocktail? You CAN NOT view this ingredient anymore if you delete'
+                           confirm={() => this.delete()}
                            handleClose={() => {
                                this.setState({
                                    confirmDialogOpen: false

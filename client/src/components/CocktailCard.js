@@ -46,6 +46,10 @@ export default class CocktailCard extends React.Component {
 
                         if (e.ingredient !== null) {
                             return <Grid key={e.ingredient.id} item> <Chip label={e.ingredient.name}
+                                                                           icon={<img
+                                                                               src={(e.ingredient.image === undefined || e.ingredient.image?.length < 1) ? '/images/Logo_2.png' : e.ingredient.image}
+                                                                               height={20} alt={e.ingredient.name}
+                                                                               style={{marginLeft: '10px', justifyContent: 'center'}}/>}
                                                                            variant="outlined"/> </Grid>;
                         }
                     })}
